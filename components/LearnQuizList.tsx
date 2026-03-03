@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { LearnQuiz } from '@/lib/schema';
 
 export default function LearnQuizList({ quizzes }: { quizzes: LearnQuiz[] }) {
@@ -12,26 +10,16 @@ export default function LearnQuizList({ quizzes }: { quizzes: LearnQuiz[] }) {
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'title' | 'count'>('title');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(quizzes.flatMap((quiz) => quiz.audiences))),
-    [quizzes]
-  );
-  const audienceQuizzes = useMemo(
-    () => quizzes.filter((quiz) => quiz.audiences.includes(audience)),
-    [quizzes, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceQuizzes.forEach((quiz) => quiz.tags.forEach((tag) => tags.add(tag)));
+    quizzes.forEach((quiz) => quiz.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceQuizzes]);
+  }, [quizzes]);
 
   const filteredQuizzes = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceQuizzes.filter((quiz) => (selectedTag ? quiz.tags.includes(selectedTag) : true));
+    let filtered = quizzes.filter((quiz) => (selectedTag ? quiz.tags.includes(selectedTag) : true));
     if (normalized) {
       filtered = filtered.filter((quiz) =>
         [quiz.title, ...quiz.tags].join(' ').toLowerCase().includes(normalized)
@@ -43,18 +31,7 @@ export default function LearnQuizList({ quizzes }: { quizzes: LearnQuiz[] }) {
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceQuizzes, query, selectedTag, sort]);
-
-  if (audienceQuizzes.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="퀴즈"
-      />
-    );
-  }
+  }, [quizzes, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

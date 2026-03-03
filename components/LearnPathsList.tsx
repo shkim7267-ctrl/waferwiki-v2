@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { LearningPath } from '@/lib/schema';
 
 export default function LearnPathsList({ paths }: { paths: LearningPath[] }) {
@@ -12,26 +10,19 @@ export default function LearnPathsList({ paths }: { paths: LearningPath[] }) {
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(paths.flatMap((path) => path.audiences))),
-    [paths]
-  );
-  const audiencePaths = useMemo(() => paths.filter((path) => path.audiences.includes(audience)), [paths, audience]);
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audiencePaths.forEach((path) => {
+    paths.forEach((path) => {
       path.tags.forEach((tag) => tags.add(tag));
       if (path.level) tags.add(path.level);
     });
     return Array.from(tags).sort();
-  }, [audiencePaths]);
+  }, [paths]);
 
   const filteredPaths = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audiencePaths.filter((path) =>
+    let filtered = paths.filter((path) =>
       selectedTag ? path.tags.includes(selectedTag) || path.level === selectedTag : true
     );
     if (normalized) {
@@ -48,18 +39,7 @@ export default function LearnPathsList({ paths }: { paths: LearningPath[] }) {
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audiencePaths, query, selectedTag, sort]);
-
-  if (audiencePaths.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="학습 경로"
-      />
-    );
-  }
+  }, [paths, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

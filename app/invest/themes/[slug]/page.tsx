@@ -156,7 +156,7 @@ export default function InvestThemeDetailPage({ params }: { params: { slug: stri
         </div>
       </section>
 
-      <NextCTA description="회사 목록에서 기업 포지셔닝을 확인하세요." href="/invest/companies" label="회사 목록 보기" />
+      <NextCTA description="브리핑 목록에서 최신 요약을 확인하세요." href="/invest/briefs" label="브리핑 보기" />
     </div>
   );
 }

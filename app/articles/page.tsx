@@ -22,7 +22,7 @@ export default function ArticlesPage() {
 
       <ArticlesList articles={articles} />
 
-      <NextCTA description="10분 스타터로 돌아가 큰그림을 다시 확인하세요." href="/start" label="스타터 보기" />
+      <NextCTA description="공정 지도로 돌아가 큰그림을 다시 확인하세요." href="/map" label="공정 지도 보기" />
     </div>
   );
 }

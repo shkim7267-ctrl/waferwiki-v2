@@ -6,7 +6,6 @@ import {
   getArticles,
   getGlossary,
   getInvestThemes,
-  getInvestCompanies,
   getInvestBriefs,
   getLearnPaths,
   getLearnConcepts,
@@ -17,14 +16,13 @@ import {
 } from '@/lib/content';
 
 export const metadata = {
-  title: '쉬운 용어사전 | WaferWiki v2'
+  title: 'Semiconductor Dictionary | WaferWiki v2'
 };
 
 export default function GlossaryPage() {
   const glossary = getGlossary();
   const articles = getArticles();
   const investThemes = getInvestThemes();
-  const investCompanies = getInvestCompanies();
   const investBriefs = getInvestBriefs();
   const learnPaths = getLearnPaths();
   const learnConcepts = getLearnConcepts();
@@ -36,8 +34,8 @@ export default function GlossaryPage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <h1 className="text-2xl font-semibold text-ink-900">쉬운 용어사전</h1>
-        <p className="text-sm text-ink-600">용어 정의와 등장 맥락을 빠르게 확인할 수 있습니다.</p>
+        <h1 className="text-2xl font-semibold text-ink-900">Semiconductor Dictionary</h1>
+        <p className="text-sm text-ink-600">핵심 용어의 정의와 등장 맥락을 빠르게 확인할 수 있습니다.</p>
       </section>
 
       <RecentViewList section="glossary" />
@@ -46,7 +44,6 @@ export default function GlossaryPage() {
         glossary={glossary}
         articles={articles}
         investThemes={investThemes}
-        investCompanies={investCompanies}
         investBriefs={investBriefs}
         learnPaths={learnPaths}
         learnConcepts={learnConcepts}

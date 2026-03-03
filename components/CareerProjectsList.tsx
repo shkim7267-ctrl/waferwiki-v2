@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { CareerProject } from '@/lib/schema';
 
 export default function CareerProjectsList({ projects }: { projects: CareerProject[] }) {
@@ -12,26 +10,16 @@ export default function CareerProjectsList({ projects }: { projects: CareerProje
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(projects.flatMap((project) => project.audiences))),
-    [projects]
-  );
-  const audienceProjects = useMemo(
-    () => projects.filter((project) => project.audiences.includes(audience)),
-    [projects, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceProjects.forEach((project) => project.tags.forEach((tag) => tags.add(tag)));
+    projects.forEach((project) => project.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceProjects]);
+  }, [projects]);
 
   const filteredProjects = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceProjects.filter((project) => (selectedTag ? project.tags.includes(selectedTag) : true));
+    let filtered = projects.filter((project) => (selectedTag ? project.tags.includes(selectedTag) : true));
     if (normalized) {
       filtered = filtered.filter((project) =>
         [project.title, project.goal_one_line, ...project.tags].join(' ').toLowerCase().includes(normalized)
@@ -43,18 +31,7 @@ export default function CareerProjectsList({ projects }: { projects: CareerProje
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceProjects, query, selectedTag, sort]);
-
-  if (audienceProjects.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="미니 프로젝트"
-      />
-    );
-  }
+  }, [projects, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

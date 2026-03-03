@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getInvestBriefs, getInvestThemes } from '@/lib/content';
 import RecentViewList from '@/components/RecentViewList';
-import PersonaScenario from '@/components/PersonaScenario';
 
 export const metadata = {
   title: 'Invest | WaferWiki v2'
@@ -26,47 +25,6 @@ export default function InvestHomePage() {
         </p>
       </section>
 
-      <PersonaScenario
-        steps={[
-          {
-            title: '오늘의 키워드로 시작',
-            description: '오늘 올라온 기술/테마 키워드에서 맥락을 잡습니다.',
-            time: '5~10분',
-            links: [
-              { label: '오늘의 키워드', href: '/invest/themes' },
-              { label: '브리핑', href: '/invest/briefs' }
-            ]
-          },
-          {
-            title: '테마 상세로 가치사슬 확인',
-            description: '가치사슬 카드와 영향 경로를 먼저 읽습니다.',
-            time: '10분',
-            links: [
-              { label: '테마 목록', href: '/invest/themes' },
-              { label: 'HBM 테마', href: '/invest/themes/hbm' }
-            ]
-          },
-          {
-            title: '기업/브리핑으로 연결',
-            description: '기업 포지셔닝과 브리핑으로 공급망 맥락을 확장합니다.',
-            time: '10~15분',
-            links: [
-              { label: '기업 목록', href: '/invest/companies' },
-              { label: '브리핑', href: '/invest/briefs' }
-            ]
-          },
-          {
-            title: '관련 용어로 정리',
-            description: '헷갈리는 용어를 사전에서 바로 정리합니다.',
-            time: '5~10분',
-            links: [
-              { label: '용어사전', href: '/glossary' },
-              { label: 'HBM 용어', href: '/glossary/hbm' }
-            ]
-          }
-        ]}
-      />
-
       <RecentViewList section="invest" />
 
       <section className="grid gap-4 md:grid-cols-2">
@@ -74,10 +32,15 @@ export default function InvestHomePage() {
           <h2 className="section-title">테마/기술 목록</h2>
           <p className="mt-2 text-sm text-ink-600">HBM, CoWoS, EUV 등 테마를 공급망 관점으로 정리합니다.</p>
         </Link>
-        <Link href="/invest/companies" className="card hover:border-accent-500">
-          <h2 className="section-title">회사 목록</h2>
-          <p className="mt-2 text-sm text-ink-600">포지셔닝 관점에서 기업을 정리합니다.</p>
-        </Link>
+        <a
+          href="https://semibridge.pages.dev"
+          target="_blank"
+          rel="noreferrer"
+          className="card hover:border-accent-500"
+        >
+          <h2 className="section-title">Semibridge 기업 허브</h2>
+          <p className="mt-2 text-sm text-ink-600">기업/포지셔닝 정보는 Semibridge에서 확인합니다.</p>
+        </a>
       </section>
 
       <section className="space-y-4">

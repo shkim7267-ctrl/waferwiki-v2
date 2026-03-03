@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { CareerRole } from '@/lib/schema';
 
 export default function CareerRolesList({ roles }: { roles: CareerRole[] }) {
@@ -12,26 +10,19 @@ export default function CareerRolesList({ roles }: { roles: CareerRole[] }) {
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(roles.flatMap((role) => role.audiences))),
-    [roles]
-  );
-  const audienceRoles = useMemo(() => roles.filter((role) => role.audiences.includes(audience)), [roles, audience]);
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceRoles.forEach((role) => {
+    roles.forEach((role) => {
       role.tags.forEach((tag) => tags.add(tag));
       role.related_terms.forEach((term) => tags.add(term));
     });
     return Array.from(tags).sort();
-  }, [audienceRoles]);
+  }, [roles]);
 
   const filteredRoles = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceRoles.filter((role) =>
+    let filtered = roles.filter((role) =>
       selectedTag ? role.tags.includes(selectedTag) || role.related_terms.includes(selectedTag) : true
     );
     if (normalized) {
@@ -45,18 +36,7 @@ export default function CareerRolesList({ roles }: { roles: CareerRole[] }) {
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceRoles, query, selectedTag, sort]);
-
-  if (audienceRoles.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="직무맵"
-      />
-    );
-  }
+  }, [roles, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

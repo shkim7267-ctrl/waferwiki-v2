@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { InvestTheme } from '@/lib/schema';
 
 export default function InvestThemesList({ themes }: { themes: InvestTheme[] }) {
@@ -12,29 +10,19 @@ export default function InvestThemesList({ themes }: { themes: InvestTheme[] }) 
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(themes.flatMap((theme) => theme.audiences))),
-    [themes]
-  );
-  const audienceThemes = useMemo(
-    () => themes.filter((theme) => theme.audiences.includes(audience)),
-    [themes, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceThemes.forEach((theme) => {
+    themes.forEach((theme) => {
       theme.tags.forEach((tag) => tags.add(tag));
       theme.segments.forEach((segment) => tags.add(segment));
     });
     return Array.from(tags).sort();
-  }, [audienceThemes]);
+  }, [themes]);
 
   const filteredThemes = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceThemes.filter((theme) =>
+    let filtered = themes.filter((theme) =>
       selectedTag ? theme.tags.includes(selectedTag) || theme.segments.includes(selectedTag) : true
     );
     if (normalized) {
@@ -48,18 +36,7 @@ export default function InvestThemesList({ themes }: { themes: InvestTheme[] }) 
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceThemes, query, selectedTag, sort]);
-
-  if (audienceThemes.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="테마/기술"
-      />
-    );
-  }
+  }, [themes, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

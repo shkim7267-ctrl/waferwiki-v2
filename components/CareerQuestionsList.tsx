@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { CareerQuestion } from '@/lib/schema';
 
 export default function CareerQuestionsList({ questions }: { questions: CareerQuestion[] }) {
@@ -12,26 +10,16 @@ export default function CareerQuestionsList({ questions }: { questions: CareerQu
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(questions.flatMap((question) => question.audiences))),
-    [questions]
-  );
-  const audienceQuestions = useMemo(
-    () => questions.filter((question) => question.audiences.includes(audience)),
-    [questions, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceQuestions.forEach((question) => question.tags.forEach((tag) => tags.add(tag)));
+    questions.forEach((question) => question.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceQuestions]);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceQuestions.filter((question) => (selectedTag ? question.tags.includes(selectedTag) : true));
+    let filtered = questions.filter((question) => (selectedTag ? question.tags.includes(selectedTag) : true));
     if (normalized) {
       filtered = filtered.filter((question) =>
         [question.title, question.intent_one_line, ...question.tags].join(' ').toLowerCase().includes(normalized)
@@ -43,18 +31,7 @@ export default function CareerQuestionsList({ questions }: { questions: CareerQu
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceQuestions, query, selectedTag, sort]);
-
-  if (audienceQuestions.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="면접 질문"
-      />
-    );
-  }
+  }, [questions, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

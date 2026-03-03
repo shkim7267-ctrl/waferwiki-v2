@@ -1,17 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import AudiencePills from '@/components/AudiencePills';
 import SearchModal from '@/components/SearchModal';
-import AudienceHint from '@/components/AudienceHint';
-import AudienceFocusBar from '@/components/AudienceFocusBar';
-import { useAudience } from '@/components/AudienceProvider';
 import type { SearchDoc } from '@/lib/search';
 
 const navItems = [
-  { label: 'Start', href: '/start' },
   { label: 'Map', href: '/map' },
-  { label: 'Glossary', href: '/glossary' },
+  { label: 'Dictionary', href: '/glossary' },
   { label: 'Articles', href: '/articles' },
   { label: 'Invest', href: '/invest' },
   { label: 'Learn', href: '/learn' },
@@ -24,8 +19,6 @@ const partnerLink = {
 };
 
 export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
-  const { audience, selectAudience } = useAudience();
-
   return (
     <header className="border-b border-ink-200/60 bg-white/80 backdrop-blur">
       <div className="container flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
@@ -46,7 +39,6 @@ export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
           </nav>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <AudiencePills selected={audience} onChange={selectAudience} size="sm" />
           <SearchModal docs={docs} />
           <a
             href={partnerLink.href}
@@ -57,10 +49,6 @@ export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
             {partnerLink.label}
           </a>
         </div>
-      </div>
-      <div className="container pb-3">
-        <AudienceHint />
-        <AudienceFocusBar />
       </div>
     </header>
   );

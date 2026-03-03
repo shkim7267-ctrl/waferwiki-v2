@@ -3,7 +3,6 @@ import {
   getArticles,
   getGlossary,
   getInvestThemes,
-  getInvestCompanies,
   getInvestBriefs,
   getLearnPaths,
   getLearnConcepts,
@@ -17,7 +16,6 @@ export function getSearchDocs(): SearchDoc[] {
   const glossary = getGlossary();
   const articles = getArticles();
   const investThemes = getInvestThemes();
-  const investCompanies = getInvestCompanies();
   const investBriefs = getInvestBriefs();
   const learnPaths = getLearnPaths();
   const learnConcepts = getLearnConcepts();
@@ -53,15 +51,6 @@ export function getSearchDocs(): SearchDoc[] {
       audiences: item.audiences,
       type: 'invest-theme' as const,
       href: `/invest/themes/${item.slug}`
-    })),
-    ...investCompanies.map((item) => ({
-      id: `ic-${item.slug}`,
-      title: item.title,
-      summary: item.positioning?.[0] ?? '',
-      tags: item.tags,
-      audiences: item.audiences,
-      type: 'invest-company' as const,
-      href: `/invest/companies/${item.slug}`
     })),
     ...investBriefs.map((item) => ({
       id: `ib-${item.slug}`,

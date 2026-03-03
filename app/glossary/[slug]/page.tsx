@@ -9,7 +9,7 @@ import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
 export const metadata = {
-  title: '용어 상세 | WaferWiki v2'
+  title: 'Dictionary | WaferWiki v2'
 };
 
 export const dynamicParams = false;
@@ -34,12 +34,12 @@ export default function GlossaryDetailPage({ params }: { params: { slug: string 
           id: `glossary:${entry.slug}`,
           title: entry.term,
           href: `/glossary/${entry.slug}`,
-          type: 'Glossary',
+          type: 'Dictionary',
           section: 'glossary'
         }}
       />
       <SummaryCard
-        label="Glossary"
+        label="Dictionary"
         title={entry.term}
         summaryLines={[entry.one_line, entry.why_it_matters, entry.where_it_appears]}
         tags={entry.tags}
@@ -50,7 +50,7 @@ export default function GlossaryDetailPage({ params }: { params: { slug: string 
         <SourceNotice
           sources={entry.sources}
           recommendedSources={1}
-          note="용어 사전은 출처 0~2개를 허용하며, 1개 이상을 권장합니다."
+          note="Dictionary는 출처 0~2개를 허용하며, 1개 이상을 권장합니다."
         />
         <SourceSummaryCard sources={entry.sources} />
       </div>

@@ -23,7 +23,7 @@ export default function MapPage() {
 
       <MapFlow steps={steps} glossary={glossary} articles={articles} />
 
-      <NextCTA description="쉬운 용어사전에서 핵심 용어를 정리해보세요." href="/glossary" label="용어사전 보기" />
+      <NextCTA description="Dictionary에서 핵심 용어를 정리해보세요." href="/glossary" label="Dictionary 보기" />
     </div>
   );
 }

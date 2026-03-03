@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { InvestBrief } from '@/lib/schema';
 
 export default function InvestBriefsList({ briefs }: { briefs: InvestBrief[] }) {
@@ -12,29 +10,19 @@ export default function InvestBriefsList({ briefs }: { briefs: InvestBrief[] }) 
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(briefs.flatMap((brief) => brief.audiences))),
-    [briefs]
-  );
-  const audienceBriefs = useMemo(
-    () => briefs.filter((brief) => brief.audiences.includes(audience)),
-    [briefs, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceBriefs.forEach((brief) => {
+    briefs.forEach((brief) => {
       brief.tags.forEach((tag) => tags.add(tag));
       if (brief.period) tags.add(brief.period);
     });
     return Array.from(tags).sort();
-  }, [audienceBriefs]);
+  }, [briefs]);
 
   const filteredBriefs = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceBriefs.filter((brief) =>
+    let filtered = briefs.filter((brief) =>
       selectedTag ? brief.tags.includes(selectedTag) || brief.period === selectedTag : true
     );
     if (normalized) {
@@ -51,18 +39,7 @@ export default function InvestBriefsList({ briefs }: { briefs: InvestBrief[] }) 
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceBriefs, query, selectedTag, sort]);
-
-  if (audienceBriefs.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="브리핑"
-      />
-    );
-  }
+  }, [briefs, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

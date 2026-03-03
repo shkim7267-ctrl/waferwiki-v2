@@ -20,26 +20,24 @@ function recencyScore(updatedAt: string) {
   return Math.max(0, Math.min(1, score));
 }
 
-function scoreItem(baseTags: string[], baseAudiences: Audience[], item: Recommendable) {
+function scoreItem(baseTags: string[], item: Recommendable) {
   const tagMatches = item.tags.map(normalize).filter((tag) => baseTags.includes(tag));
-  const audienceMatches = item.audiences.filter((aud) => baseAudiences.includes(aud));
   const tagScore = baseTags.length === 0 ? 0 : (tagMatches.length / baseTags.length) * 4;
-  const audienceScore = baseAudiences.length === 0 ? 0 : audienceMatches.length * 3;
   const freshnessScore = recencyScore(item.updated_at) * 2;
-  return tagScore + audienceScore + freshnessScore;
+  return tagScore + freshnessScore;
 }
 
 export function recommendByTags<T extends Recommendable>(
   items: T[],
   baseTags: string[],
-  baseAudiences: Audience[],
+  _baseAudiences: Audience[],
   limit: number
 ): T[] {
   const normalizedTags = baseTags.map(normalize);
   const scored = [...items]
     .map((item) => ({
       item,
-      score: scoreItem(normalizedTags, baseAudiences, item)
+      score: scoreItem(normalizedTags, item)
     }))
     .filter((entry) => entry.score > 0)
     .sort((a, b) => {
@@ -51,12 +49,7 @@ export function recommendByTags<T extends Recommendable>(
 
   if (scored.length >= limit) return scored;
 
-  const audienceFiltered =
-    baseAudiences.length === 0
-      ? items
-      : items.filter((item) => item.audiences.some((aud) => baseAudiences.includes(aud)));
-
-  const remaining = audienceFiltered.filter((item) => !scored.some((selected) => selected.slug === item.slug));
+  const remaining = items.filter((item) => !scored.some((selected) => selected.slug === item.slug));
 
   const tagFallback =
     normalizedTags.length === 0

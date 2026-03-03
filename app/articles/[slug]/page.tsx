@@ -50,7 +50,7 @@ export default function ArticleDetailPage({ params }: { params: { slug: string }
         <MDXRemote source={article.body} />
       </article>
 
-      <NextCTA description="관련 용어를 바로 확인해보세요." href="/glossary" label="용어사전 보기" />
+      <NextCTA description="관련 용어를 바로 확인해보세요." href="/glossary" label="Dictionary 보기" />
     </div>
   );
 }

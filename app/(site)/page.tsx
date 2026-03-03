@@ -2,18 +2,13 @@ import Link from 'next/link';
 
 const quickLinks = [
   {
-    title: '10분 스타터',
-    desc: '반도체 흐름을 10분 안에 파악하는 카드형 시작점.',
-    href: '/start'
-  },
-  {
     title: '공정 큰그림 지도',
     desc: 'Wafer부터 Packaging까지 공정 흐름을 한 눈에.',
     href: '/map'
   },
   {
-    title: '쉬운 용어사전',
-    desc: '용어를 빠르게 찾아보고, 맥락까지 확인.',
+    title: 'Semiconductor Dictionary',
+    desc: '핵심 용어 정의와 등장 맥락을 빠르게 확인.',
     href: '/glossary'
   },
   {
@@ -42,21 +37,21 @@ export default function HomePage() {
           반도체 입문/학습/커리어 허브
         </h1>
         <p className="max-w-2xl text-base text-ink-600">
-          Phase 0는 일반인(비전공) 기준으로 10분 안에 큰그림을 이해할 수 있도록 설계했습니다.
-          Phase 1(Invest), Phase 2(Learn), Phase 3(Career)까지 기본 기능이 구현되었습니다.
+          반도체 공정, 용어, 학습, 커리어 흐름을 한 곳에서 탐색할 수 있도록 정리했습니다.
+          기초부터 실무 맥락까지 연결해서 볼 수 있는 통합 허브입니다.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/start"
+            href="/map"
             className="rounded-full bg-accent-600 px-4 py-2 text-sm font-medium text-white"
           >
-            10분 스타터 시작
+            공정 지도 보기
           </Link>
           <Link
-            href="/map"
+            href="/glossary"
             className="rounded-full border border-ink-200/60 px-4 py-2 text-sm font-medium text-ink-700"
           >
-            공정 지도 보기
+            Dictionary 보기
           </Link>
           <a
             href="https://semibridge.pages.dev"
@@ -97,18 +92,6 @@ export default function HomePage() {
             <p className="mt-4 text-xs font-semibold text-accent-600">바로가기 →</p>
           </Link>
         ))}
-      </section>
-
-      <section className="card space-y-2">
-        <h2 className="section-title">Phase 진행 상황</h2>
-        <p className="text-sm text-ink-600">
-          Phase 0(일반인), Phase 1(Invest), Phase 2(Learn), Phase 3(Career) 기본 기능 구현 완료.
-        </p>
-        <div className="flex flex-wrap gap-2 text-xs text-ink-600">
-          <span className="rounded-full border border-ink-200/60 px-3 py-1">/invest</span>
-          <span className="rounded-full border border-ink-200/60 px-3 py-1">/learn</span>
-          <span className="rounded-full border border-ink-200/60 px-3 py-1">/career</span>
-        </div>
       </section>
     </div>
   );

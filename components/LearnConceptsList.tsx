@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { LearnConcept } from '@/lib/schema';
 
 export default function LearnConceptsList({ concepts }: { concepts: LearnConcept[] }) {
@@ -12,26 +10,16 @@ export default function LearnConceptsList({ concepts }: { concepts: LearnConcept
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(concepts.flatMap((concept) => concept.audiences))),
-    [concepts]
-  );
-  const audienceConcepts = useMemo(
-    () => concepts.filter((concept) => concept.audiences.includes(audience)),
-    [concepts, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceConcepts.forEach((concept) => concept.tags.forEach((tag) => tags.add(tag)));
+    concepts.forEach((concept) => concept.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceConcepts]);
+  }, [concepts]);
 
   const filteredConcepts = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceConcepts.filter((concept) => (selectedTag ? concept.tags.includes(selectedTag) : true));
+    let filtered = concepts.filter((concept) => (selectedTag ? concept.tags.includes(selectedTag) : true));
     if (normalized) {
       filtered = filtered.filter((concept) =>
         [concept.title, concept.one_line, ...concept.tags].join(' ').toLowerCase().includes(normalized)
@@ -43,18 +31,7 @@ export default function LearnConceptsList({ concepts }: { concepts: LearnConcept
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceConcepts, query, selectedTag, sort]);
-
-  if (audienceConcepts.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="개념 카드"
-      />
-    );
-  }
+  }, [concepts, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

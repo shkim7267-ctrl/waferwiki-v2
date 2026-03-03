@@ -3,18 +3,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { buildSearchIndex, searchDocs, type SearchDoc } from '@/lib/search';
-import { useAudience } from '@/components/AudienceProvider';
-import AudiencePills from '@/components/AudiencePills';
 import HighlightText from '@/components/HighlightText';
 
 export default function SearchModal({ docs }: { docs: SearchDoc[] }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const { audience, selectAudience } = useAudience();
 
   const { index, map } = useMemo(() => buildSearchIndex(docs), [docs]);
-  const results = useMemo(() => searchDocs(index, map, query, audience), [index, map, query, audience]);
+  const results = useMemo(() => searchDocs(index, map, query), [index, map, query]);
 
   useEffect(() => {
     if (open) {
@@ -63,9 +60,6 @@ export default function SearchModal({ docs }: { docs: SearchDoc[] }) {
               placeholder="용어, 글, 테마, 경로 등을 검색"
               className="mt-3 w-full rounded-xl border border-ink-200/60 px-4 py-3 text-sm"
             />
-            <div className="mt-3">
-              <AudiencePills selected={audience} onChange={selectAudience} size="sm" />
-            </div>
             <div className="mt-4 max-h-[60vh] space-y-3 overflow-auto">
               {query.trim() === '' ? (
                 <p className="text-sm text-ink-500">검색어를 입력하세요.</p>

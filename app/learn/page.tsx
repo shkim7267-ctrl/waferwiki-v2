@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { getLearnPaths } from '@/lib/content';
 import LearnProgressWidget from '@/components/LearnProgressWidget';
 import RecentViewList from '@/components/RecentViewList';
-import PersonaScenario from '@/components/PersonaScenario';
 
 export const metadata = {
   title: 'Learn | WaferWiki v2'
@@ -20,47 +19,6 @@ export default function LearnHomePage() {
           학습 로드맵과 선수개념을 따라 반도체 기초를 체계적으로 학습합니다.
         </p>
       </section>
-
-      <PersonaScenario
-        steps={[
-          {
-            title: '학습 경로 체크',
-            description: '기본 경로를 선택하고 체크리스트로 진행률을 관리합니다.',
-            time: '5~10분',
-            links: [
-              { label: '학습 경로', href: '/learn/paths' },
-              { label: 'Process Basics', href: '/learn/paths/process-basics' }
-            ]
-          },
-          {
-            title: '개념 카드로 연결',
-            description: '선수개념과 후속개념을 연결해 이해도를 높입니다.',
-            time: '10~15분',
-            links: [
-              { label: '개념 카드', href: '/learn/concepts' },
-              { label: '증착 기초', href: '/learn/concepts/deposition-basics' }
-            ]
-          },
-          {
-            title: '퀴즈로 점검',
-            description: '짧은 퀴즈로 핵심 개념을 바로 확인합니다.',
-            time: '5~10분',
-            links: [
-              { label: '퀴즈 허브', href: '/learn/quiz' },
-              { label: 'Process 퀴즈', href: '/learn/quiz/process-basics-quiz' }
-            ]
-          },
-          {
-            title: '관련 글로 확장',
-            description: '입문 글을 읽고 학습 흐름을 정리합니다.',
-            time: '10~15분',
-            links: [
-              { label: '입문 글', href: '/articles' },
-              { label: '공정 큰그림', href: '/articles/wafer-to-chip-overview' }
-            ]
-          }
-        ]}
-      />
 
       <RecentViewList section="learn" />
 

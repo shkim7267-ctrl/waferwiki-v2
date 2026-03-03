@@ -2,18 +2,13 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import AudiencePills from './AudiencePills';
 import ListToolbar from './ListToolbar';
 import HighlightText from './HighlightText';
-import AudienceEmptyState from './AudienceEmptyState';
 import { buildSearchIndex, searchDocs, type SearchDoc } from '@/lib/search';
-import { useAudience } from '@/components/AudienceProvider';
 import type {
-  Audience,
   GlossaryEntry,
   Article,
   InvestTheme,
-  InvestCompany,
   InvestBrief,
   LearningPath,
   LearnConcept,
@@ -27,7 +22,6 @@ export default function GlossaryList({
   glossary,
   articles,
   investThemes = [],
-  investCompanies = [],
   investBriefs = [],
   learnPaths = [],
   learnConcepts = [],
@@ -39,7 +33,6 @@ export default function GlossaryList({
   glossary: GlossaryEntry[];
   articles: Article[];
   investThemes?: InvestTheme[];
-  investCompanies?: InvestCompany[];
   investBriefs?: InvestBrief[];
   learnPaths?: LearningPath[];
   learnConcepts?: LearnConcept[];
@@ -52,21 +45,12 @@ export default function GlossaryList({
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [sort, setSort] = useState<'alpha' | 'latest'>('alpha');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(glossary.flatMap((item) => item.audiences))),
-    [glossary]
-  );
-  const audienceGlossary = useMemo(
-    () => glossary.filter((item) => item.audiences.includes(audience)),
-    [glossary, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceGlossary.forEach((item) => item.tags.forEach((tag) => tags.add(tag)));
+    glossary.forEach((item) => item.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceGlossary]);
+  }, [glossary]);
 
   const docs = useMemo<SearchDoc[]>(
     () => [
@@ -96,15 +80,6 @@ export default function GlossaryList({
         audiences: item.audiences,
         type: 'invest-theme' as const,
         href: `/invest/themes/${item.slug}`
-      })),
-      ...investCompanies.map((item) => ({
-        id: `ic-${item.slug}`,
-        title: item.title,
-        summary: item.positioning?.[0] ?? '',
-        tags: item.tags,
-        audiences: item.audiences,
-        type: 'invest-company' as const,
-        href: `/invest/companies/${item.slug}`
       })),
       ...investBriefs.map((item) => ({
         id: `ib-${item.slug}`,
@@ -174,7 +149,6 @@ export default function GlossaryList({
       glossary,
       articles,
       investThemes,
-      investCompanies,
       investBriefs,
       learnPaths,
       learnConcepts,
@@ -189,11 +163,11 @@ export default function GlossaryList({
 
   const searchResults = useMemo(() => {
     if (!query.trim()) return [];
-    return searchDocs(index, map, query, audience);
-  }, [audience, index, map, query]);
+    return searchDocs(index, map, query);
+  }, [index, map, query]);
 
   const filteredGlossary = useMemo(() => {
-    const filtered = audienceGlossary
+    const filtered = glossary
       .filter((item) => (selectedTag ? item.tags.includes(selectedTag) : true))
       .filter((item) => item.term.toLowerCase().includes(query.toLowerCase()) || !query.trim());
 
@@ -202,7 +176,7 @@ export default function GlossaryList({
       return a.term.localeCompare(b.term);
     });
     return sorted;
-  }, [audienceGlossary, query, selectedTag, sort]);
+  }, [glossary, query, selectedTag, sort]);
 
   const cardClass = density === 'compact' ? 'card p-3' : 'card';
   const summaryClass = density === 'compact' ? 'mt-1 text-xs text-ink-600' : 'mt-1 text-sm text-ink-600';
@@ -223,15 +197,7 @@ export default function GlossaryList({
           { value: 'alpha', label: '이름순' },
           { value: 'latest', label: '최신순' }
         ]}
-        placeholder="용어 또는 입문 글 검색"
-        secondary={
-          <div>
-            <label className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">Audience</label>
-            <div className="mt-2">
-              <AudiencePills selected={audience} onChange={selectAudience} />
-            </div>
-          </div>
-        }
+        placeholder="Dictionary 또는 입문 글 검색"
       />
 
       {query.trim() ? (
@@ -245,13 +211,11 @@ export default function GlossaryList({
                 <Link key={result.id} href={result.href} className={cardClass}>
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">
                     {result.type === 'glossary'
-                      ? 'Glossary'
+                      ? 'Dictionary'
                       : result.type === 'article'
                       ? 'Article'
                       : result.type === 'invest-theme'
                       ? 'Invest Theme'
-                      : result.type === 'invest-company'
-                      ? 'Invest Company'
                       : result.type === 'invest-brief'
                       ? 'Invest Brief'
                       : result.type === 'learn-path'
@@ -280,31 +244,22 @@ export default function GlossaryList({
       ) : null}
 
       <div className="space-y-4">
-        <h3 className="section-title">용어 목록</h3>
-        {audienceGlossary.length === 0 ? (
-          <AudienceEmptyState
-            audience={audience}
-            available={availableAudiences}
-            onSelect={selectAudience}
-            sectionLabel="용어사전"
-          />
-        ) : (
-          <div className="grid gap-3 md:grid-cols-2">
-            {filteredGlossary.map((item) => (
-              <Link key={item.slug} href={`/glossary/${item.slug}`} className={cardClass}>
-                <h4 className="text-base font-semibold text-ink-900">{item.term}</h4>
-                <p className={summaryClass}>{item.one_line}</p>
-                <div className="mt-3 flex flex-wrap gap-2 text-xs text-ink-500">
-                  {item.tags.slice(0, density === 'compact' ? 2 : 4).map((tag) => (
-                    <span key={tag} className="rounded-full border border-ink-200/60 px-2 py-1">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+        <h3 className="section-title">Dictionary 목록</h3>
+        <div className="grid gap-3 md:grid-cols-2">
+          {filteredGlossary.map((item) => (
+            <Link key={item.slug} href={`/glossary/${item.slug}`} className={cardClass}>
+              <h4 className="text-base font-semibold text-ink-900">{item.term}</h4>
+              <p className={summaryClass}>{item.one_line}</p>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs text-ink-500">
+                {item.tags.slice(0, density === 'compact' ? 2 : 4).map((tag) => (
+                  <span key={tag} className="rounded-full border border-ink-200/60 px-2 py-1">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { getCareerRoles } from '@/lib/content';
 import CareerProgressWidget from '@/components/CareerProgressWidget';
 import RecentViewList from '@/components/RecentViewList';
-import PersonaScenario from '@/components/PersonaScenario';
 
 export const metadata = {
   title: 'Career | WaferWiki v2'
@@ -25,47 +24,6 @@ export default function CareerHomePage() {
           참고해 반도체 엔지니어링 관점으로 재구성했습니다.
         </p>
       </section>
-
-      <PersonaScenario
-        steps={[
-          {
-            title: '직무맵 선택',
-            description: '관심 직무를 골라 역할과 요구 역량을 확인합니다.',
-            time: '5~10분',
-            links: [
-              { label: '직무맵', href: '/career/roles' },
-              { label: 'R&D 공정', href: '/career/roles/process-engineer' }
-            ]
-          },
-          {
-            title: '스킬 체크',
-            description: '스킬 매트릭스를 보고 현재 수준을 체크합니다.',
-            time: '10~15분',
-            links: [
-              { label: '준비 체크', href: '/career/checklist' },
-              { label: '직무 상세', href: '/career/roles/process-engineer' }
-            ]
-          },
-          {
-            title: '질문/프로젝트 연계',
-            description: '질문 의도와 프로젝트 템플릿으로 준비 방향을 잡습니다.',
-            time: '15~20분',
-            links: [
-              { label: '면접 Q뱅크', href: '/career/questions' },
-              { label: '미니 프로젝트', href: '/career/projects' }
-            ]
-          },
-          {
-            title: '체크리스트 정리',
-            description: '모든 직무의 준비 상태를 한곳에 정리합니다.',
-            time: '5~10분',
-            links: [
-              { label: '체크리스트', href: '/career/checklist' },
-              { label: '진행률', href: '/career/checklist' }
-            ]
-          }
-        ]}
-      />
 
       <RecentViewList section="career" />
 

@@ -3,8 +3,6 @@
 import { useMemo, useState } from 'react';
 import ArticleCard from '@/components/ArticleCard';
 import ListToolbar from '@/components/ListToolbar';
-import AudienceEmptyState from '@/components/AudienceEmptyState';
-import { useAudience } from '@/components/AudienceProvider';
 import type { Article } from '@/lib/schema';
 
 export default function ArticlesList({ articles }: { articles: Article[] }) {
@@ -12,27 +10,16 @@ export default function ArticlesList({ articles }: { articles: Article[] }) {
   const [selectedTag, setSelectedTag] = useState('');
   const [sort, setSort] = useState<'latest' | 'title'>('latest');
   const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
-  const { audience, selectAudience } = useAudience();
-
-  const availableAudiences = useMemo(
-    () => Array.from(new Set(articles.flatMap((article) => article.audiences))),
-    [articles]
-  );
-
-  const audienceArticles = useMemo(
-    () => articles.filter((article) => article.audiences.includes(audience)),
-    [articles, audience]
-  );
 
   const tagOptions = useMemo(() => {
     const tags = new Set<string>();
-    audienceArticles.forEach((article) => article.tags.forEach((tag) => tags.add(tag)));
+    articles.forEach((article) => article.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
-  }, [audienceArticles]);
+  }, [articles]);
 
   const filteredArticles = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    let filtered = audienceArticles.filter((article) => (selectedTag ? article.tags.includes(selectedTag) : true));
+    let filtered = articles.filter((article) => (selectedTag ? article.tags.includes(selectedTag) : true));
     if (normalized) {
       filtered = filtered.filter((article) =>
         [article.title, ...(article.summary_3lines ?? [])].join(' ').toLowerCase().includes(normalized)
@@ -44,18 +31,7 @@ export default function ArticlesList({ articles }: { articles: Article[] }) {
       return a.title.localeCompare(b.title);
     });
     return sorted;
-  }, [audienceArticles, query, selectedTag, sort]);
-
-  if (audienceArticles.length === 0) {
-    return (
-      <AudienceEmptyState
-        audience={audience}
-        available={availableAudiences}
-        onSelect={selectAudience}
-        sectionLabel="입문용 글"
-      />
-    );
-  }
+  }, [articles, query, selectedTag, sort]);
 
   return (
     <div className="space-y-6">

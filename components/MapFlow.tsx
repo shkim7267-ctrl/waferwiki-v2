@@ -22,6 +22,14 @@ export default function MapFlow({
     [activeSlug, steps]
   );
 
+  const bodyParagraphs = useMemo(() => {
+    if (!activeStep?.body) return [];
+    return activeStep.body
+      .split(/\n\s*\n/)
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean);
+  }, [activeStep]);
+
   const relatedTerms = useMemo(() => {
     if (!activeStep) return [];
     return recommendByTags(glossary, activeStep.tags, activeStep.audiences, 5);
@@ -70,6 +78,14 @@ export default function MapFlow({
             ))}
           </ul>
         </div>
+
+        {bodyParagraphs.length > 0 ? (
+          <div className="space-y-2 text-sm text-ink-600">
+            {bodyParagraphs.map((paragraph, index) => (
+              <p key={`${activeStep.slug}-body-${index}`}>{paragraph}</p>
+            ))}
+          </div>
+        ) : null}
 
         <SourceNotice
           sources={activeStep.sources}
