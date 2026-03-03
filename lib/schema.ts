@@ -19,6 +19,7 @@ export type GlossaryEntry = ContentBase & {
   where_it_appears: string;
   related_terms?: string[];
   related_articles?: string[];
+  body: string;
 };
 
 export type Article = ContentBase & {
@@ -41,6 +42,10 @@ export type MapStep = ContentBase & {
   step: string;
   order: number;
   summary_3lines: string[];
+  key_points: string[];
+  common_issues: string[];
+  measurements: string[];
+  handoff: string[];
   body: string;
 };
 

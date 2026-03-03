@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getArticles, getGlossary, getGlossaryBySlug } from '@/lib/content';
 import { recommendByTags } from '@/lib/recommend';
 import NextCTA from '@/components/NextCTA';
@@ -63,6 +64,13 @@ export default function GlossaryDetailPage({ params }: { params: { slug: string 
         <div className="card space-y-2">
           <h2 className="section-title">어디서 등장하나?</h2>
           <p className="text-sm text-ink-600">{entry.where_it_appears}</p>
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="section-title">설명</h2>
+        <div className="prose max-w-none text-ink-700">
+          {entry.body ? <MDXRemote source={entry.body} /> : <p>설명 내용을 준비 중입니다.</p>}
         </div>
       </section>
 

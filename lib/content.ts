@@ -127,7 +127,7 @@ export function getGlossary(): GlossaryEntry[] {
   const files = listFiles(dir, '.md');
   return files
     .map((file) => {
-      const { data } = parseFile(file);
+      const { data, content } = parseFile(file);
       const slug = getSlug(data, path.basename(file, '.md'));
       return {
         slug,
@@ -140,7 +140,8 @@ export function getGlossary(): GlossaryEntry[] {
         related_articles: toStringArray(data.related_articles),
         audiences: toAudienceArray(data.audiences),
         updated_at: String(data.updated_at ?? ''),
-        sources: toStringArray(data.sources)
+        sources: toStringArray(data.sources),
+        body: content
       } satisfies GlossaryEntry;
     })
     .sort((a, b) => a.term.localeCompare(b.term));
@@ -149,7 +150,7 @@ export function getGlossary(): GlossaryEntry[] {
 export function getGlossaryBySlug(slug: string): GlossaryEntry | undefined {
   const file = path.join(CONTENT_DIR, 'glossary', `${slug}.md`);
   if (!fs.existsSync(file)) return undefined;
-  const { data } = parseFile(file);
+  const { data, content } = parseFile(file);
   return {
     slug: getSlug(data, slug),
     term: String(data.term ?? ''),
@@ -161,7 +162,8 @@ export function getGlossaryBySlug(slug: string): GlossaryEntry | undefined {
     related_articles: toStringArray(data.related_articles),
     audiences: toAudienceArray(data.audiences),
     updated_at: String(data.updated_at ?? ''),
-    sources: toStringArray(data.sources)
+    sources: toStringArray(data.sources),
+    body: content
   } satisfies GlossaryEntry;
 }
 
@@ -239,6 +241,10 @@ export function getMapSteps(): MapStep[] {
         audiences: toAudienceArray(data.audiences),
         updated_at: String(data.updated_at ?? ''),
         sources: toStringArray(data.sources),
+        key_points: toStringArray(data.key_points),
+        common_issues: toStringArray(data.common_issues),
+        measurements: toStringArray(data.measurements),
+        handoff: toStringArray(data.handoff),
         body: content
       } satisfies MapStep;
     })

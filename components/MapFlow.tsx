@@ -87,6 +87,50 @@ export default function MapFlow({
           </div>
         ) : null}
 
+        {activeStep.key_points.length > 0 ? (
+          <div>
+            <h4 className="text-sm font-semibold text-ink-900">핵심 포인트</h4>
+            <ul className="mt-2 space-y-1 text-sm text-ink-600">
+              {activeStep.key_points.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {activeStep.common_issues.length > 0 ? (
+          <div>
+            <h4 className="text-sm font-semibold text-ink-900">문제/결함</h4>
+            <ul className="mt-2 space-y-1 text-sm text-ink-600">
+              {activeStep.common_issues.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {activeStep.measurements.length > 0 ? (
+          <div>
+            <h4 className="text-sm font-semibold text-ink-900">측정 포인트</h4>
+            <ul className="mt-2 space-y-1 text-sm text-ink-600">
+              {activeStep.measurements.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {activeStep.handoff.length > 0 ? (
+          <div>
+            <h4 className="text-sm font-semibold text-ink-900">단계 연결</h4>
+            <ul className="mt-2 space-y-1 text-sm text-ink-600">
+              {activeStep.handoff.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
         <SourceNotice
           sources={activeStep.sources}
           minSources={2}

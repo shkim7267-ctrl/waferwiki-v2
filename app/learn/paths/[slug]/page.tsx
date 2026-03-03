@@ -63,6 +63,13 @@ export default function LearnPathDetailPage({ params }: { params: { slug: string
       />
       <SummaryCard label="Learn Path" title={path.title} summaryLines={summaryLines} tags={path.tags} updatedAt={path.updated_at} />
 
+      {path.body ? (
+        <section className="space-y-3">
+          <h2 className="section-title">경로 설명</h2>
+          <div className="prose max-w-none text-ink-700">{path.body}</div>
+        </section>
+      ) : null}
+
       <PathChecklist slug={path.slug} steps={path.steps} resources={resources} />
 
       <NextCTA description="개념 카드에서 선수개념을 확인하세요." href="/learn/concepts" label="개념 카드 보기" />
