@@ -137,6 +137,25 @@ function isGoogleNewsUrl(url) {
   return url.includes('news.google.com');
 }
 
+async function fetchReadableText(url) {
+  if (!url) return '';
+  if (isGoogleNewsUrl(url)) return '';
+  const target = url.replace(/^https?:\/\//, '');
+  const jinaUrl = `https://r.jina.ai/http://${target}`;
+  try {
+    const res = await fetch(jinaUrl, {
+      headers: {
+        'User-Agent': USER_AGENT
+      }
+    });
+    if (!res.ok) return '';
+    const text = await res.text();
+    return text.replace(/\s+/g, ' ').trim().slice(0, 12000);
+  } catch {
+    return '';
+  }
+}
+
 function extractCanonicalUrl(html) {
   const match = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i);
   if (match?.[1]) return match[1];
@@ -195,7 +214,6 @@ function inferTopic(title) {
 function isGoodSummary(summary) {
   if (!summary) return false;
   if (summary.error) return false;
-  if (summary.url && isGoogleNewsUrl(summary.url)) return false;
   const articleLen = Number(summary._article_len ?? 0);
   if (articleLen < MIN_CHARS) return false;
   const bullets = Array.isArray(summary.summary_bullets)
@@ -416,7 +434,13 @@ async function run() {
     attempts += 1;
     try {
       const { finalUrl, html } = await resolveAndFetch(item.url);
-      const articleText = extractArticleText(html);
+      let articleText = extractArticleText(html);
+      if (articleText.length < MIN_CHARS) {
+        const readable = await fetchReadableText(finalUrl);
+        if (readable.length > articleText.length) {
+          articleText = readable;
+        }
+      }
       const summary = await summarizeArticle({ ...item, url: finalUrl }, articleText);
       summary._article_len = articleText.length;
       summaries.push(summary);
@@ -454,6 +478,7 @@ async function run() {
   }
 
   const goodCount = orderedSummaries.filter((s) => isGoodSummary(s)).length;
+  console.log(`Quality check: ${goodCount}/10 good summaries (attempts ${attempts}).`);
   if (goodCount < MIN_GOOD) {
     throw new Error(`Quality gate failed: ${goodCount}/10 good summaries.`);
   }
