@@ -88,7 +88,7 @@ export default function GlossaryList({
         tags: item.tags,
         audiences: item.audiences,
         type: 'invest-brief' as const,
-        href: `/invest/briefs/${item.slug}`
+        href: `/invest/briefs`
       })),
       ...learnPaths.map((item) => ({
         id: `lp-${item.slug}`,

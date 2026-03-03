@@ -69,7 +69,7 @@ export default function InvestHomePage() {
         </div>
         <div className="grid gap-3 md:grid-cols-3">
           {weeklyBriefs.map((brief) => (
-            <Link key={brief.slug} href={`/invest/briefs/${brief.slug}`} className="card">
+            <Link key={brief.slug} href="/invest/briefs" className="card">
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">Weekly</p>
               <h3 className="mt-2 text-base font-semibold text-ink-900">{brief.title}</h3>
               <p className="mt-2 text-sm text-ink-600">{brief.summary_3lines?.[0]}</p>

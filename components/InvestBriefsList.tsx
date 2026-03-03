@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import ListToolbar from '@/components/ListToolbar';
 import type { InvestBrief } from '@/lib/schema';
 
@@ -65,11 +64,7 @@ export default function InvestBriefsList({ briefs }: { briefs: InvestBrief[] }) 
       ) : (
         <section className="grid gap-4 md:grid-cols-2">
           {filteredBriefs.map((brief) => (
-            <Link
-              key={brief.slug}
-              href={`/invest/briefs/${brief.slug}`}
-              className={`card hover:border-accent-500 ${density === 'compact' ? 'p-3' : ''}`}
-            >
+            <div key={brief.slug} className={`card ${density === 'compact' ? 'p-3' : ''}`}>
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">{brief.period}</p>
               <h2 className="mt-2 text-base font-semibold text-ink-900">{brief.title}</h2>
               <p className={density === 'compact' ? 'mt-1 text-xs text-ink-600' : 'mt-2 text-sm text-ink-600'}>
@@ -82,7 +77,7 @@ export default function InvestBriefsList({ briefs }: { briefs: InvestBrief[] }) 
                   </span>
                 ))}
               </div>
-            </Link>
+            </div>
           ))}
         </section>
       )}
