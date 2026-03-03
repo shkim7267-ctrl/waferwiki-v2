@@ -314,6 +314,25 @@ async function callSolar(messages) {
   return content;
 }
 
+function parseJsonSafe(text) {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start >= 0 && end > start) {
+      const slice = text.slice(start, end + 1);
+      try {
+        return JSON.parse(slice);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
 async function resolveAndFetch(url) {
   const res = await fetch(url, {
     redirect: 'follow',
@@ -383,27 +402,84 @@ ${articleText}
 - market_impact는 40자 이상 1문장
 - 출력은 JSON 객체 1개만`;
 
+  const fallback = {
+    headline: item.headline,
+    source: item.source,
+    published_at: item.published_at,
+    topic: item.topic,
+    url: item.url,
+    summary_bullets: [item.headline],
+    key_takeaway: '',
+    market_impact: '',
+    watchlist_companies: [],
+    risks: [],
+    confidence: 'low',
+    error: 'LLM_JSON_PARSE_FAIL'
+  };
+
   try {
     const content = await callSolar([
       { role: 'system', content: system },
       { role: 'user', content: user }
     ]);
-    return JSON.parse(content);
-  } catch (error) {
-    return {
-      headline: item.headline,
-      source: item.source,
-      published_at: item.published_at,
-      topic: item.topic,
-      url: item.url,
-      summary_bullets: [item.headline],
-      key_takeaway: '',
-      market_impact: '',
-      watchlist_companies: [],
-      risks: [],
-      confidence: 'low',
-      error: 'LLM_JSON_PARSE_FAIL'
-    };
+    const parsed = parseJsonSafe(content);
+    return parsed || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+async function expandSummary(item, articleText, draft) {
+  const system =
+    '당신은 반도체 섹터 전문 애널리스트입니다. 반드시 유효한 JSON만 출력하고 추가 텍스트는 금지입니다.';
+  const user = `아래 기사 내용을 바탕으로 요약을 확장해 주세요. 반드시 JSON만 출력하세요.
+
+[메타]
+- headline: ${item.headline}
+- source: ${item.source}
+- published_at: ${item.published_at}
+- topic: ${item.topic}
+- url: ${item.url}
+
+[기사 본문]
+${articleText}
+
+[현재 요약(부족함)]
+${JSON.stringify(draft || {}, null, 2)}
+
+[출력 스키마(키 고정)]
+{
+  "headline":"",
+  "source":"",
+  "published_at":"",
+  "topic":"",
+  "url":"",
+  "summary_bullets":["","",""],
+  "key_takeaway":"",
+  "market_impact":"과장 없이 1문장",
+  "watchlist_companies":[""],
+  "risks":[""],
+  "confidence":"high|medium|low",
+  "error":""
+}
+
+제약:
+- 기사에 없는 숫자/사실은 만들지 말 것
+- 투자 수익 보장 표현 금지
+- summary_bullets는 각 30자 이상, 총 3개
+- key_takeaway는 60자 이상 1문장
+- market_impact는 40자 이상 1문장
+- 출력은 JSON 객체 1개만`;
+
+  try {
+    const content = await callSolar([
+      { role: 'system', content: system },
+      { role: 'user', content: user }
+    ]);
+    const parsed = parseJsonSafe(content);
+    return parsed || draft;
+  } catch {
+    return draft;
   }
 }
 
@@ -441,7 +517,16 @@ async function run() {
           articleText = readable;
         }
       }
-      const summary = await summarizeArticle({ ...item, url: finalUrl }, articleText);
+      const context = { ...item, url: finalUrl };
+      let summary = await summarizeArticle(context, articleText);
+      summary._article_len = articleText.length;
+      if (!isGoodSummary(summary)) {
+        const expanded = await expandSummary(context, articleText, summary);
+        if (expanded) {
+          expanded._article_len = articleText.length;
+          summary = expanded;
+        }
+      }
       summary._article_len = articleText.length;
       summaries.push(summary);
       if (isGoodSummary(summary)) {
