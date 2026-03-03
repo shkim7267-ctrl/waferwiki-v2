@@ -29,19 +29,33 @@ jobs:
         with:
           node-version: 20
 
-      - name: Generate daily brief
-        run: node scripts/generate-daily-brief.js
+      - name: Generate daily brief (retry loop)
+        timeout-minutes: 40
+        run: |
+          set -e
+          MAX_TRIES=4
+          for i in $(seq 1 $MAX_TRIES); do
+            echo "Attempt $i/$MAX_TRIES"
+            if node scripts/generate-daily-brief.js; then
+              exit 0
+            fi
+            if [ "$i" -lt "$MAX_TRIES" ]; then
+              echo "Retrying in 8 minutes..."
+              sleep 480
+            fi
+          done
+          exit 1
         env:
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
           UPSTAGE_MODEL: solar-pro
           BRIEF_TIMEZONE: Asia/Seoul
           BRIEF_SOURCE_MODE: curated
           BRIEF_MIN_GOOD: 8
-          BRIEF_MIN_CHARS: 1200
-          BRIEF_MIN_BULLET_CHARS: 30
-          BRIEF_MIN_KEY_TAKEAWAY_CHARS: 60
-          BRIEF_MIN_IMPACT_CHARS: 40
-          BRIEF_MAX_ATTEMPTS: 30
+          BRIEF_MIN_CHARS: 800
+          BRIEF_MIN_BULLET_CHARS: 20
+          BRIEF_MIN_KEY_TAKEAWAY_CHARS: 40
+          BRIEF_MIN_IMPACT_CHARS: 30
+          BRIEF_MAX_ATTEMPTS: 60
           BRIEF_OVERWRITE: false
 
       - name: Commit changes
