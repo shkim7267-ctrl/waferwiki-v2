@@ -12,6 +12,7 @@ const MIN_BULLET_CHARS = Number(process.env.BRIEF_MIN_BULLET_CHARS ?? 30);
 const MIN_KEY_TAKEAWAY_CHARS = Number(process.env.BRIEF_MIN_KEY_TAKEAWAY_CHARS ?? 60);
 const MIN_IMPACT_CHARS = Number(process.env.BRIEF_MIN_IMPACT_CHARS ?? 40);
 const MAX_ATTEMPTS = Number(process.env.BRIEF_MAX_ATTEMPTS ?? 30);
+const DEBUG_MODE = process.env.BRIEF_DEBUG === 'true';
 
 if (!UPSTAGE_API_KEY) {
   console.error('Missing UPSTAGE_API_KEY');
@@ -124,6 +125,11 @@ function stripTags(html) {
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function cleanSnippet(text) {
+  if (!text) return '';
+  return stripTags(String(text)).replace(/\s+/g, ' ').trim();
 }
 
 function extractArticleText(html) {
@@ -249,14 +255,18 @@ function parseRssItems(xml) {
     const linkMatch = itemXml.match(/<link>([\s\S]*?)<\/link>/i);
     const pubMatch = itemXml.match(/<pubDate>([\s\S]*?)<\/pubDate>/i);
     const sourceMatch = itemXml.match(/<source[^>]*>([\s\S]*?)<\/source>/i);
+    const descMatch = itemXml.match(/<description>([\s\S]*?)<\/description>/i);
+    const contentMatch = itemXml.match(/<content:encoded>([\s\S]*?)<\/content:encoded>/i);
 
     const title = titleMatch ? decodeHtml(titleMatch[1].trim()) : '';
     const link = linkMatch ? decodeHtml(linkMatch[1].trim()) : '';
     const pubDate = pubMatch ? decodeHtml(pubMatch[1].trim()) : '';
     const source = sourceMatch ? decodeHtml(sourceMatch[1].trim()) : '';
+    const description = descMatch ? decodeHtml(descMatch[1].trim()) : '';
+    const contentEncoded = contentMatch ? decodeHtml(contentMatch[1].trim()) : '';
 
     if (!title || !link) continue;
-    parsed.push({ title, link, pubDate, source });
+    parsed.push({ title, link, pubDate, source, description, contentEncoded });
   }
 
   return parsed;
@@ -286,7 +296,8 @@ async function fetchCandidates() {
     source: item.source || 'Google News',
     published_at: item.pubDate || '',
     topic: inferTopic(item.title),
-    url: item.link
+    url: item.link,
+    description: cleanSnippet(item.description || item.contentEncoded)
   }));
 }
 
@@ -489,6 +500,8 @@ async function run() {
   const slug = `daily-${dateStr}`;
   const title = `${dateStr} 일간 브리핑`;
   const outPath = path.join(process.cwd(), 'content', 'invest', 'briefs', `${slug}.mdx`);
+  const debugDir = path.join(process.cwd(), 'debug');
+  const debugFile = path.join(debugDir, `daily-brief-debug-${dateStr}.json`);
 
   if (fs.existsSync(outPath) && !OVERWRITE) {
     console.log(`Daily brief already exists: ${outPath}`);
@@ -502,6 +515,7 @@ async function run() {
   const summaries = [];
   const goodSummaries = [];
   const weakSummaries = [];
+  const debugItems = [];
   let attempts = 0;
 
   for (const item of candidates) {
@@ -516,6 +530,9 @@ async function run() {
         if (readable.length > articleText.length) {
           articleText = readable;
         }
+      }
+      if (articleText.length < MIN_CHARS && item.description) {
+        articleText = `${articleText}\n\n${item.description}`.trim();
       }
       const context = { ...item, url: finalUrl };
       let summary = await summarizeArticle(context, articleText);
@@ -534,6 +551,15 @@ async function run() {
       } else {
         weakSummaries.push(summary);
       }
+      debugItems.push({
+        url: item.url,
+        finalUrl,
+        title: item.headline,
+        article_len: articleText.length,
+        used_description: Boolean(item.description),
+        good: isGoodSummary(summary),
+        error: summary.error || ''
+      });
       await sleep(400);
     } catch (error) {
       console.warn(`Article fetch failed: ${item.url} (${error.message})`);
@@ -554,6 +580,15 @@ async function run() {
       };
       summaries.push(fallback);
       weakSummaries.push(fallback);
+      debugItems.push({
+        url: item.url,
+        finalUrl: item.url,
+        title: item.headline,
+        article_len: 0,
+        used_description: Boolean(item.description),
+        good: false,
+        error: 'ARTICLE_FETCH_FAIL'
+      });
     }
   }
 
@@ -565,6 +600,28 @@ async function run() {
   const goodCount = orderedSummaries.filter((s) => isGoodSummary(s)).length;
   console.log(`Quality check: ${goodCount}/10 good summaries (attempts ${attempts}).`);
   if (goodCount < MIN_GOOD) {
+    if (DEBUG_MODE || process.env.CI) {
+      fs.mkdirSync(debugDir, { recursive: true });
+      fs.writeFileSync(
+        debugFile,
+        JSON.stringify(
+          {
+            reason: 'QUALITY_GATE',
+            goodCount,
+            attempts,
+            minGood: MIN_GOOD,
+            minChars: MIN_CHARS,
+            minBulletChars: MIN_BULLET_CHARS,
+            minKeyTakeaway: MIN_KEY_TAKEAWAY_CHARS,
+            minImpact: MIN_IMPACT_CHARS,
+            items: debugItems
+          },
+          null,
+          2
+        )
+      );
+      console.log(`Debug written: ${debugFile}`);
+    }
     throw new Error(`Quality gate failed: ${goodCount}/10 good summaries.`);
   }
 
