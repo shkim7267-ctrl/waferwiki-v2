@@ -2,8 +2,8 @@ name: Daily Semiconductor Brief
 
 on:
   schedule:
-    # 09:00 KST (UTC+9)
-    - cron: '0 0 * * *'
+    # Retry window: 09:00~14:00 KST (UTC+9)
+    - cron: '0 0-5 * * *'
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ jobs:
           BRIEF_MIN_KEY_TAKEAWAY_CHARS: 60
           BRIEF_MIN_IMPACT_CHARS: 40
           BRIEF_MAX_ATTEMPTS: 30
-          BRIEF_OVERWRITE: true
+          BRIEF_OVERWRITE: false
 
       - name: Commit changes
         run: |
