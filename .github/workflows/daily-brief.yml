@@ -5,9 +5,15 @@ on:
     # Retry window: 09:00~14:00 KST (UTC+9)
     - cron: '0 0-5 * * *'
   workflow_dispatch:
+    inputs:
+      retry_count:
+        description: 'Retry attempt count'
+        required: false
+        default: '0'
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   generate-brief:
@@ -49,3 +55,24 @@ jobs:
           git add content/invest/briefs
           git commit -m "chore: daily brief $(date -u +%F)"
           git push
+
+      - name: Retry on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RETRY_COUNT: ${{ github.event.inputs.retry_count }}
+        run: |
+          MAX_RETRIES=3
+          COUNT=${RETRY_COUNT:-0}
+          if [ "$COUNT" -ge "$MAX_RETRIES" ]; then
+            echo "Max retries reached ($COUNT/$MAX_RETRIES)."
+            exit 0
+          fi
+          NEXT=$((COUNT + 1))
+          echo "Dispatching retry attempt $NEXT..."
+          PAYLOAD=$(printf '{"ref":"main","inputs":{"retry_count":"%s"}}' "$NEXT")
+          curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/daily-brief.yml/dispatches \
+            -d "$PAYLOAD"
