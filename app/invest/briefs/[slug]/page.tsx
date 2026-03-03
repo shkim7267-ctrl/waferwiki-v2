@@ -13,8 +13,9 @@ export const metadata = {
 };
 
 export const dynamicParams = false;
+export const dynamic = 'force-static';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return getInvestBriefs().map((brief) => ({ slug: brief.slug }));
 }
 
