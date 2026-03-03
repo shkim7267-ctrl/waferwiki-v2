@@ -1,0 +1,51 @@
+name: Daily Semiconductor Brief
+
+on:
+  schedule:
+    # 09:00 KST (UTC+9)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-brief:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate daily brief
+        run: node scripts/generate-daily-brief.js
+        env:
+          UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
+          UPSTAGE_MODEL: solar-pro
+          BRIEF_TIMEZONE: Asia/Seoul
+          BRIEF_SOURCE_MODE: curated
+          BRIEF_MIN_GOOD: 8
+          BRIEF_MIN_CHARS: 1200
+          BRIEF_MIN_BULLET_CHARS: 30
+          BRIEF_MIN_KEY_TAKEAWAY_CHARS: 60
+          BRIEF_MIN_IMPACT_CHARS: 40
+          BRIEF_MAX_ATTEMPTS: 30
+          BRIEF_OVERWRITE: true
+
+      - name: Commit changes
+        run: |
+          if [[ -z "$(git status --porcelain content/invest/briefs)" ]]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "waferwiki-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/invest/briefs
+          git commit -m "chore: daily brief $(date -u +%F)"
+          git push

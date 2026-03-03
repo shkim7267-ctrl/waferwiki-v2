@@ -1,0 +1,202 @@
+[
+  {
+    "date": "2026-02-20",
+    "entity_type": "theme",
+    "entity_slug": "hbm",
+    "title": "HBM 수요 전망 업데이트",
+    "one_line": "AI 수요 증가로 HBM 공급 계획이 재조정되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-18",
+    "entity_type": "theme",
+    "entity_slug": "cowos",
+    "title": "CoWoS 캐파 확장 발표",
+    "one_line": "인터포저 라인 증설 일정이 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-17",
+    "entity_type": "theme",
+    "entity_slug": "euv",
+    "title": "EUV 장비 공급 일정 공지",
+    "one_line": "차세대 노광 장비 리드타임이 공개되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-16",
+    "entity_type": "theme",
+    "entity_slug": "gaa",
+    "title": "GAA 공정 전환 계획 발표",
+    "one_line": "차세대 공정 전환 로드맵이 업데이트되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-15",
+    "entity_type": "theme",
+    "entity_slug": "tsv",
+    "title": "TSV 공정 품질 개선 발표",
+    "one_line": "3D 적층 수율 개선 계획이 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-14",
+    "entity_type": "theme",
+    "entity_slug": "advanced-packaging",
+    "title": "Advanced Packaging 협력 확대",
+    "one_line": "OSAT/파운드리 협업 범위가 확대되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-13",
+    "entity_type": "theme",
+    "entity_slug": "chiplet",
+    "title": "Chiplet 표준화 논의",
+    "one_line": "인터페이스 표준 논의가 진행 중이다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-12",
+    "entity_type": "theme",
+    "entity_slug": "high-na-euv",
+    "title": "High-NA EUV 개발 로드맵 공개",
+    "one_line": "차세대 장비 개발 일정이 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-20",
+    "entity_type": "company",
+    "entity_slug": "samsung-electronics",
+    "title": "메모리 캐파 업데이트",
+    "one_line": "메모리 라인 운영 계획이 공개되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-19",
+    "entity_type": "company",
+    "entity_slug": "sk-hynix",
+    "title": "HBM 생산 일정 발표",
+    "one_line": "HBM 생산량 전망이 업데이트되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-18",
+    "entity_type": "company",
+    "entity_slug": "tsmc",
+    "title": "CoWoS 투자 계획 언급",
+    "one_line": "CoWoS 관련 투자 계획이 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-17",
+    "entity_type": "company",
+    "entity_slug": "asml",
+    "title": "EUV 장비 출하 일정 공지",
+    "one_line": "EUV 장비 출하 일정이 조정되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-16",
+    "entity_type": "company",
+    "entity_slug": "applied-materials",
+    "title": "장비 로드맵 발표",
+    "one_line": "증착/식각 장비 라인업 업데이트가 있었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-15",
+    "entity_type": "company",
+    "entity_slug": "amkor",
+    "title": "패키징 캐파 확대",
+    "one_line": "고급 패키징 캐파 확대 계획이 발표되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-14",
+    "entity_type": "company",
+    "entity_slug": "samsung-electronics",
+    "title": "파운드리 고객 발표",
+    "one_line": "신규 파운드리 고객 확보 소식이 있었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-13",
+    "entity_type": "company",
+    "entity_slug": "sk-hynix",
+    "title": "HBM 테스트 협력",
+    "one_line": "테스트 협력 확대가 발표되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-12",
+    "entity_type": "company",
+    "entity_slug": "tsmc",
+    "title": "첨단 패키징 인력 확대",
+    "one_line": "첨단 패키징 조직 확충이 발표되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-11",
+    "entity_type": "company",
+    "entity_slug": "asml",
+    "title": "High-NA 개발 업데이트",
+    "one_line": "High-NA 관련 연구 업데이트가 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-10",
+    "entity_type": "company",
+    "entity_slug": "applied-materials",
+    "title": "증착 장비 개선 발표",
+    "one_line": "증착 장비 신제품 정보가 공개되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  },
+  {
+    "date": "2026-02-09",
+    "entity_type": "company",
+    "entity_slug": "amkor",
+    "title": "테스트 라인 증설",
+    "one_line": "테스트 라인 증설 일정이 공유되었다.",
+    "sources": [
+      "https://www.ibm.com/topics/semiconductors"
+    ]
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "slug": "device-basics-quiz",
+  "title": "소자 기초 퀴즈",
+  "audiences": [
+    "student"
+  ],
+  "tags": [
+    "device",
+    "basics"
+  ],
+  "questions": [
+    {
+      "q": "도핑의 목적은?",
+      "choices": [
+        "전기 특성 조절",
+        "패턴 제거",
+        "패키징"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "도핑은 전기 특성을 조절한다.",
+      "related_terms": [
+        "doping"
+      ]
+    },
+    {
+      "q": "FinFET은 어떤 구조를 의미하나?",
+      "choices": [
+        "지느러미 형태의 트랜지스터",
+        "패키징 방식",
+        "테스트 장비"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "FinFET은 미세화 시대의 트랜지스터 구조다.",
+      "related_terms": [
+        "finfet"
+      ]
+    }
+  ]
+}

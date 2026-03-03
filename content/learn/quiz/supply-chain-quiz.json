@@ -1,0 +1,25 @@
+{
+  "slug": "supply-chain-quiz",
+  "title": "공급망 퀴즈",
+  "audiences": [
+    "student"
+  ],
+  "tags": [
+    "supply-chain"
+  ],
+  "questions": [
+    {
+      "q": "OSAT은 공급망에서 어떤 역할을 하나?",
+      "choices": [
+        "패키징/테스트",
+        "노광 장비 생산",
+        "설계 자동화"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "OSAT은 패키징과 테스트를 담당한다.",
+      "related_terms": [
+        "packaging"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "advanced-quiz",
+  "title": "고급 개념 퀴즈",
+  "audiences": [
+    "student"
+  ],
+  "tags": [
+    "advanced"
+  ],
+  "questions": [
+    {
+      "q": "High-NA EUV의 목적은?",
+      "choices": [
+        "더 미세한 패턴 구현",
+        "테스트 시간 단축",
+        "패키징 자동화"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "High-NA EUV는 더 미세한 패턴을 구현한다.",
+      "related_terms": [
+        "euv"
+      ]
+    }
+  ]
+}

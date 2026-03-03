@@ -1,0 +1,26 @@
+{
+  "slug": "packaging-quiz",
+  "title": "패키징 퀴즈",
+  "audiences": [
+    "student"
+  ],
+  "tags": [
+    "packaging",
+    "basics"
+  ],
+  "questions": [
+    {
+      "q": "패키징 단계의 역할은?",
+      "choices": [
+        "칩 보호 및 연결",
+        "회로 패턴 생성",
+        "도핑"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "패키징은 칩을 보호하고 연결한다.",
+      "related_terms": [
+        "packaging"
+      ]
+    }
+  ]
+}

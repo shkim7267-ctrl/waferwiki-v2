@@ -1,0 +1,56 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import { getArticleBySlug, getArticles } from '@/lib/content';
+import NextCTA from '@/components/NextCTA';
+import SourceNotice from '@/components/SourceNotice';
+import SourceSummaryCard from '@/components/SourceSummaryCard';
+import SummaryCard from '@/components/SummaryCard';
+import RecentViewTracker from '@/components/RecentViewTracker';
+
+export function generateStaticParams() {
+  return getArticles().map((article) => ({ slug: article.slug }));
+}
+
+export const dynamicParams = false;
+
+export default function ArticleDetailPage({ params }: { params: { slug: string } }) {
+  const article = getArticleBySlug(params.slug);
+  if (!article) return notFound();
+
+  return (
+    <div className="space-y-8">
+      <RecentViewTracker
+        item={{
+          id: `article:${article.slug}`,
+          title: article.title,
+          href: `/articles/${article.slug}`,
+          type: 'Article',
+          section: 'articles'
+        }}
+      />
+      <SummaryCard
+        label="Article"
+        title={article.title}
+        summaryLines={article.summary_3lines ?? []}
+        tags={article.tags}
+        updatedAt={article.updated_at}
+      />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <SourceNotice
+          sources={article.sources}
+          minSources={2}
+          note="출처 2개 미만이면 빌드가 실패합니다."
+        />
+        <SourceSummaryCard sources={article.sources} />
+      </div>
+
+      <article className="prose max-w-none text-ink-700">
+        <MDXRemote source={article.body} />
+      </article>
+
+      <NextCTA description="관련 용어를 바로 확인해보세요." href="/glossary" label="용어사전 보기" />
+    </div>
+  );
+}

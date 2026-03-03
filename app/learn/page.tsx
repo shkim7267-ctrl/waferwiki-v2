@@ -1,0 +1,96 @@
+import Link from 'next/link';
+import { getLearnPaths } from '@/lib/content';
+import LearnProgressWidget from '@/components/LearnProgressWidget';
+import RecentViewList from '@/components/RecentViewList';
+import PersonaScenario from '@/components/PersonaScenario';
+
+export const metadata = {
+  title: 'Learn | WaferWiki v2'
+};
+
+export default function LearnHomePage() {
+  const paths = getLearnPaths();
+
+  return (
+    <div className="space-y-10">
+      <section className="space-y-3">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">Learn Hub</p>
+        <h1 className="text-3xl font-semibold text-ink-900">대학생 학습 허브</h1>
+        <p className="text-sm text-ink-600">
+          학습 로드맵과 선수개념을 따라 반도체 기초를 체계적으로 학습합니다.
+        </p>
+      </section>
+
+      <PersonaScenario
+        steps={[
+          {
+            title: '학습 경로 체크',
+            description: '기본 경로를 선택하고 체크리스트로 진행률을 관리합니다.',
+            time: '5~10분',
+            links: [
+              { label: '학습 경로', href: '/learn/paths' },
+              { label: 'Process Basics', href: '/learn/paths/process-basics' }
+            ]
+          },
+          {
+            title: '개념 카드로 연결',
+            description: '선수개념과 후속개념을 연결해 이해도를 높입니다.',
+            time: '10~15분',
+            links: [
+              { label: '개념 카드', href: '/learn/concepts' },
+              { label: '증착 기초', href: '/learn/concepts/deposition-basics' }
+            ]
+          },
+          {
+            title: '퀴즈로 점검',
+            description: '짧은 퀴즈로 핵심 개념을 바로 확인합니다.',
+            time: '5~10분',
+            links: [
+              { label: '퀴즈 허브', href: '/learn/quiz' },
+              { label: 'Process 퀴즈', href: '/learn/quiz/process-basics-quiz' }
+            ]
+          },
+          {
+            title: '관련 글로 확장',
+            description: '입문 글을 읽고 학습 흐름을 정리합니다.',
+            time: '10~15분',
+            links: [
+              { label: '입문 글', href: '/articles' },
+              { label: '공정 큰그림', href: '/articles/wafer-to-chip-overview' }
+            ]
+          }
+        ]}
+      />
+
+      <RecentViewList section="learn" />
+
+      <section className="grid gap-4 md:grid-cols-[2fr_1fr]">
+        <div className="grid gap-4 md:grid-cols-2">
+          {paths.slice(0, 3).map((path) => (
+            <Link key={path.slug} href={`/learn/paths/${path.slug}`} className="card hover:border-accent-500">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">{path.level}</p>
+              <h2 className="mt-2 text-base font-semibold text-ink-900">{path.title}</h2>
+              <p className="mt-2 text-sm text-ink-600">{path.steps[0]?.goal_one_line ?? '학습 목표를 준비 중입니다.'}</p>
+            </Link>
+          ))}
+        </div>
+        <LearnProgressWidget paths={paths} />
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <Link href="/learn/paths" className="card">
+          <h3 className="section-title">학습 경로</h3>
+          <p className="mt-2 text-sm text-ink-600">과정별 체크리스트와 진행률을 확인합니다.</p>
+        </Link>
+        <Link href="/learn/concepts" className="card">
+          <h3 className="section-title">개념 카드</h3>
+          <p className="mt-2 text-sm text-ink-600">선수개념과 후속개념을 연결해 학습합니다.</p>
+        </Link>
+        <Link href="/learn/quiz" className="card">
+          <h3 className="section-title">퀴즈</h3>
+          <p className="mt-2 text-sm text-ink-600">핵심 개념을 점검하는 간단 퀴즈입니다.</p>
+        </Link>
+      </section>
+    </div>
+  );
+}

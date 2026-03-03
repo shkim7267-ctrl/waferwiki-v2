@@ -1,0 +1,39 @@
+{
+  "slug": "process-basics-quiz",
+  "title": "공정 기초 퀴즈",
+  "audiences": [
+    "student"
+  ],
+  "tags": [
+    "process",
+    "basics"
+  ],
+  "questions": [
+    {
+      "q": "웨이퍼는 공정에서 어떤 역할을 하나?",
+      "choices": [
+        "공정의 출발점",
+        "패키징 단계",
+        "테스트 장비"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "웨이퍼는 회로를 만드는 실리콘 원판이다.",
+      "related_terms": [
+        "wafer"
+      ]
+    },
+    {
+      "q": "리소그래피는 무엇을 하는 공정인가?",
+      "choices": [
+        "패턴을 새기는 공정",
+        "박막을 제거하는 공정",
+        "칩을 테스트하는 공정"
+      ],
+      "answer_index": 0,
+      "explanation_one_line": "리소그래피는 회로 패턴을 그린다.",
+      "related_terms": [
+        "lithography"
+      ]
+    }
+  ]
+}
