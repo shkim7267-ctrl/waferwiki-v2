@@ -3,8 +3,6 @@ import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getCareerProjectBySlug, getCareerProjects, getGlossary } from '@/lib/content';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -48,15 +46,6 @@ export default function CareerProjectDetailPage({ params }: { params: { slug: st
         tags={project.tags}
         updatedAt={project.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={project.sources}
-          recommendedSources={1}
-          note="프로젝트 템플릿은 경험 기반이어도 가능합니다. 회사/제도/수치 관련 내용에는 출처를 권장합니다."
-        />
-        <SourceSummaryCard sources={project.sources} />
-      </div>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

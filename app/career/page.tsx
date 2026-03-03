@@ -20,8 +20,8 @@ export default function CareerHomePage() {
           기업 내부정보나 전형 유출 정보는 다루지 않습니다.
         </p>
         <p className="text-xs text-ink-500">
-          직무 구성은 SK hynix 채용 직무 소개의 분류(소자, R&D 공정, 양산기술, 양산기술(P&T), 품질보증, Utility 기술 등)를
-          참고해 반도체 엔지니어링 관점으로 재구성했습니다.
+          직무 구성은 공정·장비·수율·테스트·패키징·신뢰성 등 반도체 제조/품질 흐름을 기준으로 재구성했습니다.
+          회사별 세부 명칭은 다를 수 있습니다.
         </p>
       </section>
 

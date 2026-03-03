@@ -3,8 +3,6 @@ import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getCareerQuestionBySlug, getCareerQuestions, getGlossary } from '@/lib/content';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -48,15 +46,6 @@ export default function CareerQuestionDetailPage({ params }: { params: { slug: s
         tags={question.tags}
         updatedAt={question.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={question.sources}
-          recommendedSources={1}
-          note="면접 Q뱅크는 범용적인 구조를 제공합니다. 회사/제도/수치 관련 내용에는 출처를 권장합니다."
-        />
-        <SourceSummaryCard sources={question.sources} />
-      </div>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

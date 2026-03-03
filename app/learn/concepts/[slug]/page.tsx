@@ -4,8 +4,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getArticles, getGlossary, getLearnConceptBySlug, getLearnConcepts } from '@/lib/content';
 import { recommendByTags } from '@/lib/recommend';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -53,15 +51,6 @@ export default function LearnConceptDetailPage({ params }: { params: { slug: str
         tags={concept.tags}
         updatedAt={concept.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={concept.sources}
-          recommendedSources={1}
-          note="학습용 개념 카드는 출처 1개 이상을 권장합니다."
-        />
-        <SourceSummaryCard sources={concept.sources} />
-      </div>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

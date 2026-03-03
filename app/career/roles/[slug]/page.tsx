@@ -11,8 +11,6 @@ import {
 } from '@/lib/content';
 import SkillMatrixChecklist from '@/components/SkillMatrixChecklist';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -66,15 +64,6 @@ export default function CareerRoleDetailPage({ params }: { params: { slug: strin
         tags={role.tags}
         updatedAt={role.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={role.sources}
-          recommendedSources={1}
-          note="경험/일반 지식 기반도 허용됩니다. 회사/제도/수치 관련 내용에는 출처를 권장합니다."
-        />
-        <SourceSummaryCard sources={role.sources} />
-      </div>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

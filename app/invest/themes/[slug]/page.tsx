@@ -11,8 +11,6 @@ import {
 } from '@/lib/content';
 import { recommendByTags } from '@/lib/recommend';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -58,15 +56,6 @@ export default function InvestThemeDetailPage({ params }: { params: { slug: stri
         tags={displayTags}
         updatedAt={theme.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={theme.sources}
-          minSources={2}
-          note="Investor 콘텐츠는 출처 2개 미만이면 빌드가 실패합니다."
-        />
-        <SourceSummaryCard sources={theme.sources} />
-      </div>
 
       <section className="space-y-4">
         <h2 className="section-title">Value Chain</h2>

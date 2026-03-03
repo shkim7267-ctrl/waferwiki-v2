@@ -4,8 +4,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getArticles, getGlossary, getGlossaryBySlug } from '@/lib/content';
 import { recommendByTags } from '@/lib/recommend';
 import NextCTA from '@/components/NextCTA';
-import SourceNotice from '@/components/SourceNotice';
-import SourceSummaryCard from '@/components/SourceSummaryCard';
 import SummaryCard from '@/components/SummaryCard';
 import RecentViewTracker from '@/components/RecentViewTracker';
 
@@ -46,15 +44,6 @@ export default function GlossaryDetailPage({ params }: { params: { slug: string 
         tags={entry.tags}
         updatedAt={entry.updated_at}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <SourceNotice
-          sources={entry.sources}
-          recommendedSources={1}
-          note="Dictionary는 출처 0~2개를 허용하며, 1개 이상을 권장합니다."
-        />
-        <SourceSummaryCard sources={entry.sources} />
-      </div>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

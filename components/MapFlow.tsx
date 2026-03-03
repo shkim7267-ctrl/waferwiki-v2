@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { recommendByTags } from '@/lib/recommend';
-import SourceNotice from '@/components/SourceNotice';
 import type { Article, GlossaryEntry, MapStep } from '@/lib/schema';
 
 export default function MapFlow({
@@ -130,13 +129,6 @@ export default function MapFlow({
             </ul>
           </div>
         ) : null}
-
-        <SourceNotice
-          sources={activeStep.sources}
-          minSources={2}
-          compact
-          note="지도 단계 설명은 출처 2개 이상을 요구합니다."
-        />
 
         <div>
           <h4 className="text-sm font-semibold text-ink-900">관련 용어</h4>
