@@ -18,9 +18,10 @@ const config: Config = {
           200: '#cfd6e6'
         },
         accent: {
-          600: '#ea4b1e',
-          500: '#ff6a2a',
-          100: '#ffe7d9'
+          700: '#cf3f12',
+          600: '#e6451a',
+          500: '#ff6a33',
+          100: '#ffe1d6'
         }
       }
     }

@@ -5,6 +5,7 @@ import SearchModal from '@/components/SearchModal';
 import type { SearchDoc } from '@/lib/search';
 
 const navItems = [
+  { label: 'Start', href: '/start' },
   { label: 'Map', href: '/map' },
   { label: 'Dictionary', href: '/glossary' },
   { label: 'Articles', href: '/articles' },
@@ -20,7 +21,7 @@ const partnerLink = {
 
 export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
   return (
-    <header className="border-b border-ink-200/60 bg-white/80 backdrop-blur">
+    <header className="border-b border-accent-100 bg-white/85 backdrop-blur">
       <div className="container flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap items-center gap-4">
           <Link href="/" className="flex items-center gap-2 font-semibold text-ink-900">

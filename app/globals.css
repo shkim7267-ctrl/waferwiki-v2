@@ -7,7 +7,11 @@
 }
 
 body {
-  @apply bg-white text-ink-900 antialiased;
+  @apply text-ink-900 antialiased;
+  background:
+    radial-gradient(900px 600px at 10% -10%, rgba(255, 122, 51, 0.15), transparent 60%),
+    radial-gradient(900px 600px at 90% 0%, rgba(230, 69, 26, 0.12), transparent 55%),
+    #fff;
 }
 
 .prose-start {
@@ -19,7 +23,7 @@ body {
 }
 
 .card {
-  @apply rounded-xl border border-ink-200/60 bg-white p-5 shadow-sm;
+  @apply rounded-2xl border border-ink-200/60 bg-white p-5 shadow-sm;
 }
 
 .section-title {

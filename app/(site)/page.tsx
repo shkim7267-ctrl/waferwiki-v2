@@ -2,6 +2,11 @@ import Link from 'next/link';
 
 const quickLinks = [
   {
+    title: 'Start 가이드',
+    desc: '페르소나별 추천 흐름으로 빠르게 시작하기.',
+    href: '/start'
+  },
+  {
     title: '공정 큰그림 지도',
     desc: 'Wafer부터 Packaging까지 공정 흐름을 한 눈에.',
     href: '/map'
@@ -42,10 +47,10 @@ export default function HomePage() {
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/map"
+            href="/start"
             className="rounded-full bg-accent-600 px-4 py-2 text-sm font-medium text-white"
           >
-            공정 지도 보기
+            Start 가이드
           </Link>
           <Link
             href="/glossary"
