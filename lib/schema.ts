@@ -1,6 +1,23 @@
 export const AUDIENCES = ['general', 'investor', 'student', 'jobseeker'] as const;
 export type Audience = (typeof AUDIENCES)[number];
 
+export type Profile = {
+  id: string;
+  nickname?: string | null;
+  tags: string[];
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type ChatSession = {
+  id: string;
+  user_id: string;
+  title: string;
+  summary: string;
+  tags: string[];
+  created_at: string;
+};
+
 export type ContentBase = {
   title?: string;
   term?: string;

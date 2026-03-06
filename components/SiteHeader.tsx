@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import SearchModal from '@/components/SearchModal';
+import { getSupabaseClient } from '@/lib/supabaseClient';
 import type { SearchDoc } from '@/lib/search';
+import type { Session } from '@supabase/supabase-js';
 
 const navItems = [
   { label: 'Start', href: '/start' },
@@ -11,7 +14,8 @@ const navItems = [
   { label: 'Articles', href: '/articles' },
   { label: 'Invest', href: '/invest' },
   { label: 'Learn', href: '/learn' },
-  { label: 'Career', href: '/career' }
+  { label: 'Career', href: '/career' },
+  { label: 'Chat', href: '/chat' }
 ] as const;
 
 const partnerLink = {
@@ -20,6 +24,29 @@ const partnerLink = {
 };
 
 export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    let ignore = false;
+    const supabase = getSupabaseClient();
+    if (!supabase) return undefined;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!ignore) setSession(data.session ?? null);
+    });
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+    });
+    return () => {
+      ignore = true;
+      subscription.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    const supabase = getSupabaseClient();
+    if (supabase) await supabase.auth.signOut();
+  };
+
   return (
     <header className="border-b border-accent-100 bg-white/85 backdrop-blur">
       <div className="container flex flex-col gap-3 py-4 md:flex-row md:items-center md:justify-between">
@@ -41,6 +68,30 @@ export default function SiteHeader({ docs }: { docs: SearchDoc[] }) {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <SearchModal docs={docs} />
+          {session ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/me"
+                className="rounded-full border border-ink-200/60 px-3 py-1 text-xs font-medium text-ink-700"
+              >
+                My
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-full border border-ink-200/60 px-3 py-1 text-xs font-medium text-ink-700"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="rounded-full border border-ink-200/60 px-3 py-1 text-xs font-medium text-ink-700"
+            >
+              Login
+            </Link>
+          )}
           <a
             href={partnerLink.href}
             target="_blank"

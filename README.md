@@ -104,3 +104,24 @@ npm run build
 ## 배포
 
 Cloudflare Pages 기준 정적 export(`output: 'export'`) 설정.
+
+## 로그인 + AI 대화 + 맞춤 추천 (Supabase)
+
+### 필수 환경변수
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (Edge Functions용)
+- `UPSTAGE_API_KEY`
+
+### 테이블/정책
+`supabase/schema.sql`을 Supabase SQL Editor에 실행하세요.
+
+### Edge Functions
+Supabase Functions에 아래 함수를 배포합니다.
+- `supabase/functions/chat`
+- `supabase/functions/recommend`
+
+### 라우트
+- `/login` 이메일 매직링크 로그인
+- `/chat` AI 질문 + 요약 저장
+- `/me` 개인 기록 + 맞춤 추천
