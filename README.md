@@ -110,7 +110,7 @@ Cloudflare Pages 기준 정적 export(`output: 'export'`) 설정.
 ### 필수 환경변수
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY` (Edge Functions용)
+- `SERVICE_ROLE_KEY` (Edge Functions용)
 - `UPSTAGE_API_KEY`
 
 ### 테이블/정책
