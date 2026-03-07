@@ -45,6 +45,10 @@ export default function HomePage() {
           반도체 공정, 용어, 학습, 커리어 흐름을 한 곳에서 탐색할 수 있도록 정리했습니다.
           기초부터 실무 맥락까지 연결해서 볼 수 있는 통합 허브입니다.
         </p>
+        <div className="rounded-2xl border border-ink-200/60 bg-white px-4 py-3 text-sm text-ink-700">
+          <span className="font-semibold text-ink-900">1분 사용법:</span> Map → Dictionary → Learn → Career 순서로 큰그림을 잡고,
+          필요한 주제는 Invest에서 키워드로 확인하세요.
+        </div>
         <div className="flex flex-wrap gap-3">
           <Link
             href="/start"

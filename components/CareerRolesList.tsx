@@ -38,6 +38,14 @@ export default function CareerRolesList({ roles }: { roles: CareerRole[] }) {
     return sorted;
   }, [roles, query, selectedTag, sort]);
 
+  const visibleRoles = useMemo(() => {
+    return filteredRoles.filter((role) => {
+      const bodyLength = role.body ? role.body.replace(/\s+/g, '').length : 0;
+      if (bodyLength < 80 && role.one_line.length < 20) return false;
+      return true;
+    });
+  }, [filteredRoles]);
+
   return (
     <div className="space-y-6">
       <ListToolbar
@@ -57,11 +65,13 @@ export default function CareerRolesList({ roles }: { roles: CareerRole[] }) {
         placeholder="직무 검색"
       />
 
-      {filteredRoles.length === 0 ? (
-        <p className="muted">조건에 맞는 직무가 없습니다.</p>
+      {visibleRoles.length === 0 ? (
+        <div className="card border-accent-100 bg-accent-100/40">
+          <p className="text-sm text-ink-700">콘텐츠 보강 중입니다. 다른 섹션을 먼저 확인해 주세요.</p>
+        </div>
       ) : (
         <section className="grid gap-4 md:grid-cols-2">
-          {filteredRoles.map((role) => (
+          {visibleRoles.map((role) => (
             <Link
               key={role.slug}
               href={`/career/roles/${role.slug}`}

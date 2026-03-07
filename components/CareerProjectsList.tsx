@@ -33,6 +33,14 @@ export default function CareerProjectsList({ projects }: { projects: CareerProje
     return sorted;
   }, [projects, query, selectedTag, sort]);
 
+  const visibleProjects = useMemo(() => {
+    return filteredProjects.filter((project) => {
+      const bodyLength = project.body ? project.body.replace(/\s+/g, '').length : 0;
+      if (bodyLength < 80 && project.goal_one_line.length < 20) return false;
+      return true;
+    });
+  }, [filteredProjects]);
+
   return (
     <div className="space-y-6">
       <ListToolbar
@@ -52,11 +60,13 @@ export default function CareerProjectsList({ projects }: { projects: CareerProje
         placeholder="미니 프로젝트 검색"
       />
 
-      {filteredProjects.length === 0 ? (
-        <p className="muted">조건에 맞는 프로젝트가 없습니다.</p>
+      {visibleProjects.length === 0 ? (
+        <div className="card border-accent-100 bg-accent-100/40">
+          <p className="text-sm text-ink-700">콘텐츠 보강 중입니다. 다른 섹션을 먼저 확인해 주세요.</p>
+        </div>
       ) : (
         <section className="grid gap-4 md:grid-cols-2">
-          {filteredProjects.map((project) => (
+          {visibleProjects.map((project) => (
             <Link
               key={project.slug}
               href={`/career/projects/${project.slug}`}
