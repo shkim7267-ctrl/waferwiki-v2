@@ -1,0 +1,58 @@
+[
+  {
+    "id": "process-flow",
+    "title": "공정 기본 흐름",
+    "concepts": [
+      "wafer-basics",
+      "lithography-basics",
+      "etch-basics",
+      "deposition-basics",
+      "interconnect-basics",
+      "test-basics",
+      "yield-basics"
+    ]
+  },
+  {
+    "id": "lithography-stack",
+    "title": "리소그래피 스택",
+    "concepts": [
+      "mask-basics",
+      "lithography-basics",
+      "euv-basics",
+      "high-na-basics",
+      "defect-basics"
+    ]
+  },
+  {
+    "id": "device-stack",
+    "title": "소자 구조 흐름",
+    "concepts": [
+      "semiconductor-basics",
+      "doping-basics",
+      "implantation-basics",
+      "device-structures",
+      "logic-basics"
+    ]
+  },
+  {
+    "id": "memory-packaging",
+    "title": "메모리-패키징 연결",
+    "concepts": [
+      "memory-basics",
+      "hbm-basics",
+      "chiplet-basics",
+      "advanced-packaging-basics",
+      "packaging-basics"
+    ]
+  },
+  {
+    "id": "industry-stack",
+    "title": "산업/투자 관점",
+    "concepts": [
+      "supply-chain-basics",
+      "capex-basics",
+      "roadmap-basics",
+      "quality-basics"
+    ]
+  }
+]

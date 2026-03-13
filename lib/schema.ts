@@ -166,8 +166,16 @@ export type LearnConcept = ContentBase & {
   slug: string;
   title: string;
   one_line: string;
+  domain?: 'process' | 'device' | 'packaging' | 'system' | 'business';
   prereq_concepts: string[];
   next_concepts: string[];
+  related_concepts: string[];
+  resources: {
+    type: 'article' | 'video';
+    title: string;
+    url: string;
+    source: string;
+  }[];
   body?: string;
 };
 

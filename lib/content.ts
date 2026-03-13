@@ -452,8 +452,24 @@ export function getLearnConcepts(): LearnConcept[] {
         slug,
         title: String(data.title ?? ''),
         one_line: String(data.one_line ?? ''),
+        domain: (data.domain as LearnConcept['domain']) ?? 'process',
         prereq_concepts: toStringArray(data.prereq_concepts),
         next_concepts: toStringArray(data.next_concepts),
+        related_concepts: toStringArray(data.related_concepts),
+        resources: Array.isArray(data.resources)
+          ? data.resources
+              .map((item) => {
+                if (!item || typeof item !== 'object') return null;
+                const raw = item as Record<string, unknown>;
+                return {
+                  type: (raw.type as 'article' | 'video') ?? 'article',
+                  title: String(raw.title ?? ''),
+                  url: String(raw.url ?? ''),
+                  source: String(raw.source ?? '')
+                };
+              })
+              .filter((item): item is LearnConcept['resources'][number] => Boolean(item?.title && item?.url))
+          : [],
         tags: toStringArray(data.tags),
         audiences: toAudienceArray(data.audiences),
         updated_at: String(data.updated_at ?? ''),
@@ -472,8 +488,24 @@ export function getLearnConceptBySlug(slug: string): LearnConcept | undefined {
     slug: getSlug(data, slug),
     title: String(data.title ?? ''),
     one_line: String(data.one_line ?? ''),
+    domain: (data.domain as LearnConcept['domain']) ?? 'process',
     prereq_concepts: toStringArray(data.prereq_concepts),
     next_concepts: toStringArray(data.next_concepts),
+    related_concepts: toStringArray(data.related_concepts),
+    resources: Array.isArray(data.resources)
+      ? data.resources
+          .map((item) => {
+            if (!item || typeof item !== 'object') return null;
+            const raw = item as Record<string, unknown>;
+            return {
+              type: (raw.type as 'article' | 'video') ?? 'article',
+              title: String(raw.title ?? ''),
+              url: String(raw.url ?? ''),
+              source: String(raw.source ?? '')
+            };
+          })
+          .filter((item): item is LearnConcept['resources'][number] => Boolean(item?.title && item?.url))
+      : [],
     tags: toStringArray(data.tags),
     audiences: toAudienceArray(data.audiences),
     updated_at: String(data.updated_at ?? ''),

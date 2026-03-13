@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { getArticles, getGlossary, getLearnConceptBySlug, getLearnConcepts } from '@/lib/content';
+import { getLearnTrails } from '@/lib/learn-trails';
 import { recommendByTags } from '@/lib/recommend';
 import NextCTA from '@/components/NextCTA';
 import SummaryCard from '@/components/SummaryCard';
@@ -23,7 +24,8 @@ export default function LearnConceptDetailPage({ params }: { params: { slug: str
 
   const glossary = getGlossary();
   const articles = getArticles();
-  const conceptMap = new Map(getLearnConcepts().map((item) => [item.slug, item.title]));
+  const allConcepts = getLearnConcepts();
+  const conceptMap = new Map(allConcepts.map((item) => [item.slug, item.title]));
 
   const relatedTerms = recommendByTags(glossary, concept.tags, concept.audiences, 5);
   const relatedArticles = recommendByTags(articles, concept.tags, concept.audiences, 3);
@@ -32,6 +34,16 @@ export default function LearnConceptDetailPage({ params }: { params: { slug: str
     `선수개념 ${concept.prereq_concepts.length}개`,
     `후속개념 ${concept.next_concepts.length}개`
   ];
+  const relatedConcepts = concept.related_concepts ?? [];
+  const backlinks = allConcepts
+    .filter((item) =>
+      item.slug !== concept.slug &&
+      (item.prereq_concepts.includes(concept.slug) ||
+        item.next_concepts.includes(concept.slug) ||
+        item.related_concepts.includes(concept.slug))
+    )
+    .map((item) => item.slug);
+  const trails = getLearnTrails().filter((trail) => trail.concepts.includes(concept.slug));
 
   return (
     <div className="space-y-10">
@@ -51,6 +63,54 @@ export default function LearnConceptDetailPage({ params }: { params: { slug: str
         tags={concept.tags}
         updatedAt={concept.updated_at}
       />
+
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="card space-y-2">
+          <h2 className="section-title">연관 개념</h2>
+          <div className="space-y-2 text-sm text-ink-600">
+            {relatedConcepts.length === 0 ? (
+              <p className="muted">없음</p>
+            ) : (
+              relatedConcepts.map((slug) => (
+                <Link key={slug} href={`/learn/concepts/${slug}`} className="block text-accent-600">
+                  {conceptMap.get(slug) ?? slug}
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+        <div className="card space-y-2">
+          <h2 className="section-title">백링크</h2>
+          <div className="space-y-2 text-sm text-ink-600">
+            {backlinks.length === 0 ? (
+              <p className="muted">없음</p>
+            ) : (
+              backlinks.map((slug) => (
+                <Link key={slug} href={`/learn/concepts/${slug}`} className="block text-accent-600">
+                  {conceptMap.get(slug) ?? slug}
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+        <div className="card space-y-2">
+          <h2 className="section-title">학습 트레일</h2>
+          <div className="space-y-2 text-sm text-ink-600">
+            {trails.length === 0 ? (
+              <p className="muted">없음</p>
+            ) : (
+              trails.map((trail) => (
+                <div key={trail.id} className="rounded-lg border border-ink-200/60 px-3 py-2">
+                  <p className="text-sm font-semibold text-ink-800">{trail.title}</p>
+                  <p className="mt-1 text-xs text-ink-500">
+                    {trail.concepts.map((slug) => conceptMap.get(slug) ?? slug).join(' → ')}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </section>
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">
@@ -89,6 +149,29 @@ export default function LearnConceptDetailPage({ params }: { params: { slug: str
           {concept.body ? <MDXRemote source={concept.body} /> : <p>정의 설명을 준비 중입니다.</p>}
         </div>
       </section>
+
+      {concept.resources.length > 0 ? (
+        <section className="space-y-3">
+          <h2 className="section-title">학습 자료</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {concept.resources.map((resource) => (
+              <a
+                key={`${resource.type}-${resource.url}`}
+                href={resource.url}
+                target="_blank"
+                rel="noreferrer"
+                className="card hover:border-accent-500"
+              >
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">
+                  {resource.type === 'video' ? 'Video' : 'Article'}
+                </p>
+                <p className="mt-2 text-sm font-semibold text-ink-900">{resource.title}</p>
+                <p className="mt-1 text-xs text-ink-500">{resource.source}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="grid gap-4 md:grid-cols-2">
         <div className="card space-y-2">

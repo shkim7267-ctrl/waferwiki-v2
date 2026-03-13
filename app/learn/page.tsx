@@ -38,7 +38,7 @@ export default function LearnHomePage() {
         <LearnProgressWidget paths={paths} />
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-4">
         <Link href="/learn/paths" className="card">
           <h3 className="section-title">학습 경로</h3>
           <p className="mt-2 text-sm text-ink-600">과정별 체크리스트와 진행률을 확인합니다.</p>
@@ -46,6 +46,10 @@ export default function LearnHomePage() {
         <Link href="/learn/concepts" className="card">
           <h3 className="section-title">개념 카드</h3>
           <p className="mt-2 text-sm text-ink-600">선수개념과 후속개념을 연결해 학습합니다.</p>
+        </Link>
+        <Link href="/learn/graph" className="card">
+          <h3 className="section-title">개념 그래프</h3>
+          <p className="mt-2 text-sm text-ink-600">개념 연결을 한눈에 탐색합니다.</p>
         </Link>
         <Link href="/learn/quiz" className="card">
           <h3 className="section-title">퀴즈</h3>
