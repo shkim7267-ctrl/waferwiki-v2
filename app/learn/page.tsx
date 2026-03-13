@@ -18,6 +18,9 @@ export default function LearnHomePage() {
         <p className="text-sm text-ink-600">
           학습 로드맵과 선수개념을 따라 반도체 기초를 체계적으로 학습합니다.
         </p>
+        <div className="rounded-2xl border border-ink-200/60 bg-white px-4 py-3 text-sm text-ink-700">
+          <span className="font-semibold text-ink-900">추천 학습 흐름:</span> 경로 선택 → 개념 카드 → 퀴즈로 확인 → Map으로 큰그림 복습
+        </div>
       </section>
 
       <RecentViewList section="learn" />
