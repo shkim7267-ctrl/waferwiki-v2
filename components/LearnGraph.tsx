@@ -26,6 +26,18 @@ export default function LearnGraphView({ graph }: { graph: LearnGraph }) {
   const highlightNodes = useMemo(() => new Set<NodeType>(), []);
   const highlightLinks = useMemo(() => new Set<LinkType>(), []);
 
+  const hoverNeighbors = useMemo(() => {
+    if (!hoverNode) return [];
+    const neighbors = new Set<string>();
+    graph.links.forEach((link) => {
+      if (link.source === hoverNode.id) neighbors.add(link.target);
+      if (link.target === hoverNode.id) neighbors.add(link.source);
+    });
+    return Array.from(neighbors)
+      .map((id) => graph.nodes.find((node) => node.id === id))
+      .filter(Boolean) as NodeType[];
+  }, [hoverNode, graph]);
+
   useEffect(() => {
     if (!containerRef.current) return;
     const observer = new ResizeObserver(() => {
@@ -70,7 +82,21 @@ export default function LearnGraphView({ graph }: { graph: LearnGraph }) {
         </span>
       </div>
 
-      <div ref={containerRef} className="h-[70vh] min-h-[520px] rounded-2xl border border-ink-200/60 bg-ink-950/90">
+      <div ref={containerRef} className="relative h-[70vh] min-h-[520px] rounded-2xl border border-ink-200/60 bg-slate-900">
+        {hoverNode ? (
+          <div className="absolute left-4 top-4 z-10 max-w-xs rounded-xl border border-white/10 bg-slate-900/90 px-4 py-3 text-xs text-slate-200">
+            <p className="text-sm font-semibold text-white">{hoverNode.name}</p>
+            <p className="mt-1 text-[11px] text-slate-300">연결 개념 {hoverNeighbors.length}개</p>
+            <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-300">
+              {hoverNeighbors.slice(0, 8).map((node) => (
+                <span key={node.id} className="rounded-full border border-white/10 px-2 py-0.5">
+                  {node.name}
+                </span>
+              ))}
+              {hoverNeighbors.length > 8 ? <span className="text-slate-400">+{hoverNeighbors.length - 8}</span> : null}
+            </div>
+          </div>
+        ) : null}
         <ForceGraph2D
           width={dimensions.width}
           height={dimensions.height}
@@ -78,10 +104,10 @@ export default function LearnGraphView({ graph }: { graph: LearnGraph }) {
           nodeId="id"
           linkSource="source"
           linkTarget="target"
-          nodeRelSize={6}
+          nodeRelSize={8}
           nodeColor={(node: any) => DOMAIN_COLORS[(node as NodeType).domain ?? 'process'] ?? '#4f46e5'}
-          linkColor={(link: any) => (highlightLinks.has(link as LinkType) ? '#f97316' : 'rgba(255,255,255,0.15)')}
-          linkWidth={(link: any) => (highlightLinks.has(link as LinkType) ? 2.2 : 0.6)}
+          linkColor={(link: any) => (highlightLinks.has(link as LinkType) ? '#fb923c' : 'rgba(148,163,184,0.35)')}
+          linkWidth={(link: any) => (highlightLinks.has(link as LinkType) ? 2.4 : 0.8)}
           linkDirectionalParticles={0}
           onNodeHover={(node: any) => setHoverNode(node as NodeType | null)}
           onNodeClick={(node: any) => router.push(`/learn/concepts/${(node as NodeType).id}`)}
@@ -92,10 +118,13 @@ export default function LearnGraphView({ graph }: { graph: LearnGraph }) {
             const showLabel = data.core || data.degree >= 4 || hoverNode?.id === data.id;
             if (showLabel) {
               ctx.font = `${fontSize}px sans-serif`;
-              ctx.fillStyle = '#ffffff';
+              ctx.fillStyle = '#e2e8f0';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
+              ctx.shadowColor = 'rgba(15,23,42,0.6)';
+              ctx.shadowBlur = 6 / globalScale;
               ctx.fillText(label, data.x ?? 0, (data.y ?? 0) - 10 / globalScale);
+              ctx.shadowBlur = 0;
             }
           }}
           nodeCanvasObjectMode={() => 'after'}

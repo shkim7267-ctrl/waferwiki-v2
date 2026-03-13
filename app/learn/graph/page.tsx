@@ -16,7 +16,7 @@ export default function LearnGraphPage() {
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-500">Learn Graph</p>
         <h1 className="text-2xl font-semibold text-ink-900">개념 온톨로지 그래프</h1>
         <p className="text-sm text-ink-600">
-          개념 간 연결을 한눈에 확인하고, 노드를 클릭해 상세 설명으로 이동하세요.
+          개념 간 연결을 한눈에 확인하고, 노드를 클릭해 상세 설명으로 이동하세요. (줌/팬 가능)
         </p>
       </section>
 
